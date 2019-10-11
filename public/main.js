@@ -23,7 +23,6 @@ function createWindow() {
     imageWindow.loadURL(isDev ? 'http://localhost:3000/image' : `file://${path.join(__dirname, '../build/index.html')}`);
     settingsWindow.loadURL(isDev ? 'http://localhost:3000/settings' : `file://${path.join(__dirname, '../build/index.html')}`);
 
-
     mainWindow.on('closed', () => mainWindow = null);
 
     imageWindow.on('close', (e) => {
