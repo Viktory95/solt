@@ -2,59 +2,105 @@
  * Created by Vi on 12.10.2019.
  */
 const writer_reader = require('./writer_reader');
-const tableName = 'solt_db/words.json';
+const album = require('./albums');
+const tableName = 'words.json';
 
-let word = function (id, albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic) {
-    this.id = id;
-    this.albumId = albumId;
-    this.wordNative = wordNative;
-    this.wordTranslate = wordTranslate;
-    this.image = image;
-    this.status = status;
-    this.description = description;
-    this.lastDate = lastDate;
-    this.statistic = statistic;
-}
+module.exports = {
+    word: (id, albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic) => {
+        return {
+            id: id,
+            albumId: albumId,
+            wordNative: wordNative,
+            wordTranslate: wordTranslate,
+            image: image,
+            status: status,
+            description: description,
+            lastDate: lastDate,
+            statistic: statistic
+        };
+    },
 
-function createWord(albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic) {
-    let fileData = writer_reader.getData(tableName);
-    let id = fileData.length == undefined || fileData.length == NaN || fileData.length == null ? 0 : fileData[fileData.length].id + 1;
-    fileData.table.push(new word(id, albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic));
-    return writer_reader.setData(tableName, fileData, function () {
-        console.log('Word with id = ' + id + ' was created.');
-    });
-}
-
-function deleteWordById(id) {
-    let fileData = writer_reader.getData(tableName);
-    let delNum = -1;
-    for(let elNum = 0; elNum < fileData.length; elNum++) {
-        if (json[elNum]['id'].toString() === id) {
-            delNum = elNum;
+    isExists: (id) => {
+        let fileData = writer_reader.getData(tableName);
+        for(let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === id || fileData[elNum]['wordNative'] === id) {
+                return true;
+            }
         }
-    }
-    delete fileData[delNum];
-    return writer_reader.setData(tableName, fileData, function () {
-        console.log('Word with id = ' + id + ' was deleted.');
-    });
-}
+        return false;
+    },
 
-function updateWord(updatedWord) {
-    let fileData = writer_reader.getData(tableName);
-    for(let elNum = 0; elNum < fileData.length; elNum++) {
-        if (json[elNum]['id'].toString() === updatedWord.id) {
-            json[elNum]['name'] = updatedWord.albumId;
-            json[elNum]['name'] = updatedWord.wordNative;
-            json[elNum]['name'] = updatedWord.wordTranslate;
-            json[elNum]['name'] = updatedWord.image;
-            json[elNum]['name'] = updatedWord.status;
-            json[elNum]['name'] = updatedWord.description;
-            json[elNum]['name'] = updatedWord.lastDate;
-            json[elNum]['name'] = updatedWord.statistic;
+    getAllWords: () => {
+        return writer_reader.getData(tableName);
+    },
+
+    createWord: (albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic) => {
+
+        if(!album.isExists(albumId)) {
+            console.log('Can not create Word line. ' +
+                'Album does not exists! ' +
+                'Please check album with id = ' + albumId);
+            return false;
         }
-    }
-    return writer_reader.setData(tableName, fileData, function () {
-        console.log('Word with name = ' + updatedWord.wordNative + ' was updated.');
-    });
-}
 
+        if(module.exports.isExists(wordNative)) {
+            console.log('Can not create Word line. ' +
+                'Word with wordNative = ' + wordNative + ' already exists.');
+            return false;
+        }
+
+        let fileData = writer_reader.getData(tableName);
+
+        let id = fileData.length == undefined
+            || fileData.length == NaN
+            || fileData.length == null
+            || fileData.length == 0
+            ? 0
+            : fileData[fileData.length - 1].id + 1;
+        fileData.push(module.exports.word(id, albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic));
+        return writer_reader.setData(tableName, fileData, function () {
+            console.log('Word with id = ' + id + ' was created.');
+        });
+    },
+
+    deleteWordById: (id) => {
+        let fileData = writer_reader.getData(tableName);
+        let delNum = -1;
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === id) {
+                delNum = elNum;
+            }
+        }
+        delete fileData[delNum];
+        return writer_reader.setData(tableName, fileData, function () {
+            console.log('Word with id = ' + id + ' was deleted.');
+        });
+    },
+
+    updateWord: (updatedWord) => {
+        let fileData = writer_reader.getData(tableName);
+
+        if(!album.isExists(updatedWord.albumId)) {
+            console.log('Can not update Word line. ' +
+                'Album does not exists! ' +
+                'Please check album with id = ' + updatedWord.albumId);
+            return false;
+        }
+
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === updatedWord.id) {
+                fileData[elNum]['albumId'] = updatedWord.albumId;
+                fileData[elNum]['wordNative'] = updatedWord.wordNative;
+                fileData[elNum]['wordTranslate'] = updatedWord.wordTranslate;
+                fileData[elNum]['image'] = updatedWord.image;
+                fileData[elNum]['status'] = updatedWord.status;
+                fileData[elNum]['description'] = updatedWord.description;
+                fileData[elNum]['lastDate'] = updatedWord.lastDate;
+                fileData[elNum]['statistic'] = updatedWord.statistic;
+            }
+        }
+        return writer_reader.setData(tableName, fileData, function () {
+            console.log('Word with name = ' + updatedWord.wordNative + ' was updated.');
+        });
+    }
+}

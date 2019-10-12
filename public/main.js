@@ -9,6 +9,7 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require('path');
 const url = require('url');
 const isDev = require('electron-is-dev');
+const test_api = require('./solt_db_api/solt_db_api_test/solt_db_api_test');
 
 let mainWindow;
 let imageWindow;
@@ -22,6 +23,9 @@ function createWindow() {
     mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
     imageWindow.loadURL(isDev ? 'http://localhost:3000/image' : `file://${path.join(__dirname, '../build/index.html')}`);
     settingsWindow.loadURL(isDev ? 'http://localhost:3000/settings' : `file://${path.join(__dirname, '../build/index.html')}`);
+
+    /*Test api*/
+    test_api.create_test();
 
     mainWindow.on('closed', () => mainWindow = null);
 

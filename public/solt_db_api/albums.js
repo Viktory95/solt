@@ -2,63 +2,109 @@
  * Created by Vi on 12.10.2019.
  */
 const writer_reader = require('./writer_reader');
-const tableName = 'solt_db/albums.json';
+const language = require('./languages');
+const tableName = 'albums.json';
 
-let album = function (id, name, languageNative, languageTranslate) {
-    this.id = id;
-    this.name = name;
-    this.languageNative = languageNative;
-    this.languageTranslate = languageTranslate;
-}
+module.exports = {
+    album: (id, name, languageNative, languageTranslate) => {
+        return {
+            id: id,
+            name: name,
+            languageNative: languageNative,
+            languageTranslate: languageTranslate
+        };
+    },
 
-function createAlbum(name, languageNative, languageTranslate) {
-    let fileData = writer_reader.getData(tableName);
-    let id = fileData.length == undefined || fileData.length == NaN || fileData.length == null ? 0 : fileData[fileData.length].id + 1;
-    fileData.table.push(new album(id, name, languageNative, languageTranslate));
-    return writer_reader.setData(tableName, fileData, function () {
-        console.log('Album with id = ' + id + ' was created.');
-    });
-}
-
-function deleteAlbumById(id) {
-    let fileData = writer_reader.getData(tableName);
-    let delNum = -1;
-    for(let elNum = 0; elNum < fileData.length; elNum++) {
-        if (json[elNum]['id'].toString() === id) {
-            delNum = elNum;
+    isExists: (id) => {
+        let fileData = writer_reader.getData(tableName);
+        for(let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === id || fileData[elNum]['name'] === id) {
+                return true;
+            }
         }
-    }
-    delete fileData[delNum];
-    return writer_reader.setData(tableName, fileData, function () {
-        console.log('Album with id = ' + id + ' was deleted.');
-    });
-}
+        return false;
+    },
 
-function deleteAlbumByName(name) {
-    let fileData = writer_reader.getData(tableName);
-    let delNum = -1;
-    for(let elNum = 0; elNum < fileData.length; elNum++) {
-        if (json[elNum]['name'].toString() === name) {
-            delNum = elNum;
+    getAllAlbums: () => {
+        return writer_reader.getData(tableName);
+    },
+
+    createAlbum: (name, languageNative, languageTranslate) => {
+
+        if(!language.isExists(languageNative) || !language.isExists(languageTranslate)) {
+            console.log('Can not create Album line. ' +
+                'Language does not exists! ' +
+                'Please check language with id = ' + languageNative + ' and with id = ' + languageTranslate);
+            return false;
         }
-    }
-    delete fileData[delNum];
-    return writer_reader.setBlocks(tableName, fileData, function () {
-        console.log('Album with name = ' + name + ' was deleted.');
-    });
-}
 
-function updateAlbum(updatedAlbum) {
-    let fileData = writer_reader.getData(tableName);
-    for(let elNum = 0; elNum < fileData.length; elNum++) {
-        if (json[elNum]['id'].toString() === updatedAlbum.id) {
-            json[elNum]['name'] = updatedAlbum.name;
-            json[elNum]['languageNative'] = updatedAlbum.languageNative;
-            json[elNum]['languageTranslate'] = updatedAlbum.languageTranslate;
+        if(module.exports.isExists(name)) {
+            console.log('Can not create Album line. ' +
+                'Album with name = ' + name + ' already exists.');
+            return false;
         }
-    }
-    return writer_reader.setData(tableName, fileData, function () {
-        console.log('Block with id = ' + updatedAlbum.id + ' was updated.');
-    });
-}
 
+        let fileData = writer_reader.getData(tableName);
+
+        let id = fileData.length == undefined
+            || fileData.length == NaN
+            || fileData.length == null
+            || fileData.length == 0
+            ? 0
+            : fileData[fileData.length - 1].id + 1;
+        fileData.push(module.exports.album(id, name, languageNative, languageTranslate));
+        return writer_reader.setData(tableName, fileData, function () {
+            console.log('Album with id = ' + id + ' was created.');
+        });
+    },
+
+    deleteAlbumById: (id) => {
+        let fileData = writer_reader.getData(tableName);
+        let delNum = -1;
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === id) {
+                delNum = elNum;
+            }
+        }
+        delete fileData[delNum];
+        return writer_reader.setData(tableName, fileData, function () {
+            console.log('Album with id = ' + id + ' was deleted.');
+        });
+    },
+
+    deleteAlbumByName: (name) => {
+        let fileData = writer_reader.getData(tableName);
+        let delNum = -1;
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['name'] === name) {
+                delNum = elNum;
+            }
+        }
+        delete fileData[delNum];
+        return writer_reader.setBlocks(tableName, fileData, function () {
+            console.log('Album with name = ' + name + ' was deleted.');
+        });
+    },
+
+    updateAlbum: (updatedAlbum) => {
+        let fileData = writer_reader.getData(tableName);
+
+        if(!language.isExists(updatedAlbum.languageNative) || !language.isExists(updatedAlbum.languageTranslate)) {
+            console.log('Can not update Album line. ' +
+                'Language does not exists! ' +
+                'Please check language with id = ' + updatedAlbum.languageNative + ' and with id = ' + updatedAlbum.languageTranslate);
+            return false;
+        }
+
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === updatedAlbum.id) {
+                fileData[elNum]['name'] = updatedAlbum.name;
+                fileData[elNum]['languageNative'] = updatedAlbum.languageNative;
+                fileData[elNum]['languageTranslate'] = updatedAlbum.languageTranslate;
+            }
+        }
+        return writer_reader.setData(tableName, fileData, function () {
+            console.log('Block with id = ' + updatedAlbum.id + ' was updated.');
+        });
+    }
+}
