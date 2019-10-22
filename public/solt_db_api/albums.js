@@ -29,6 +29,26 @@ module.exports = {
         return writer_reader.getData(tableName);
     },
 
+    getAlbumsByLanguageNative: (languageNative) => {
+        let fileData = writer_reader.getData(tableName);
+        for(let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['languageNative'] !== languageNative) {
+                delete fileData[elNum];
+            }
+        }
+        return fileData;
+    },
+
+    getAlbumsByLanguageTranslate: (languageTranslate) => {
+        let fileData = writer_reader.getData(tableName);
+        for(let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['languageTranslate'] !== languageTranslate) {
+                delete fileData[elNum];
+            }
+        }
+        return fileData;
+    },
+
     createAlbum: (name, languageNative, languageTranslate) => {
 
         if(!language.isExists(languageNative) || !language.isExists(languageTranslate)) {

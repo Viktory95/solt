@@ -25,7 +25,7 @@ function createWindow() {
     settingsWindow.loadURL(isDev ? 'http://localhost:3000/settings' : `file://${path.join(__dirname, '../build/index.html')}`);
 
     /*Test api*/
-    test_api.create_test();
+    //test_api.create_test();
 
     mainWindow.on('closed', () => mainWindow = null);
 

@@ -6,7 +6,11 @@ import React from 'react';
 class Block extends React.Component {
     render() {
         return (
-            <li>{this.props.blockName}</li>
+            <div>
+                <li>{this.props.blockName}</li>
+                <li>{this.props.timePeriod}</li>
+                <li>{this.props.isShow}</li>
+            </div>
         );
     }
 }

@@ -3,7 +3,7 @@
  */
 const writer_reader = require('./writer_reader');
 const album = require('./albums');
-const tableName = 'words.json';
+const tableName = '_words.json';
 
 module.exports = {
     word: (id, albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic) => {
@@ -20,8 +20,8 @@ module.exports = {
         };
     },
 
-    isExists: (id) => {
-        let fileData = writer_reader.getData(tableName);
+    isExists: (id, albumId) => {
+        let fileData = writer_reader.getData(albumId + tableName);
         for(let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] === id || fileData[elNum]['wordNative'] === id) {
                 return true;
@@ -49,7 +49,7 @@ module.exports = {
             return false;
         }
 
-        let fileData = writer_reader.getData(tableName);
+        let fileData = writer_reader.getData(albumId + tableName);
 
         let id = fileData.length == undefined
             || fileData.length == NaN
@@ -58,13 +58,13 @@ module.exports = {
             ? 0
             : fileData[fileData.length - 1].id + 1;
         fileData.push(module.exports.word(id, albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic));
-        return writer_reader.setData(tableName, fileData, function () {
+        return writer_reader.setData(albumId + tableName, fileData, function () {
             console.log('Word with id = ' + id + ' was created.');
         });
     },
 
-    deleteWordById: (id) => {
-        let fileData = writer_reader.getData(tableName);
+    deleteWordById: (id, albumId) => {
+        let fileData = writer_reader.getData(albumId + tableName);
         let delNum = -1;
         for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] === id) {
@@ -72,15 +72,15 @@ module.exports = {
             }
         }
         delete fileData[delNum];
-        return writer_reader.setData(tableName, fileData, function () {
+        return writer_reader.setData(albumId + tableName, fileData, function () {
             console.log('Word with id = ' + id + ' was deleted.');
         });
     },
 
     updateWord: (updatedWord) => {
-        let fileData = writer_reader.getData(tableName);
+        let fileData = writer_reader.getData(updatedWord.albumId + tableName);
 
-        if(!album.isExists(updatedWord.albumId)) {
+        if(!album.isExists(updatedWord.id, updatedWord.albumId)) {
             console.log('Can not update Word line. ' +
                 'Album does not exists! ' +
                 'Please check album with id = ' + updatedWord.albumId);
@@ -99,7 +99,7 @@ module.exports = {
                 fileData[elNum]['statistic'] = updatedWord.statistic;
             }
         }
-        return writer_reader.setData(tableName, fileData, function () {
+        return writer_reader.setData(updatedWord.albumId + tableName, fileData, function () {
             console.log('Word with name = ' + updatedWord.wordNative + ' was updated.');
         });
     }

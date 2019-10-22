@@ -6,13 +6,22 @@ const path = require('path');
 
 module.exports = {
     getData : (tableName) => {
-        let fileData = fs.readFileSync(path.resolve('./solt_db/'+tableName), 'utf8', (err, jsonString) => {
-            if (err) {
-                console.log("File read failed:", err)
-                return
-            }
-            return jsonString;
-        });
+        let fileData = null;
+        if (fs.existsSync(path)) {
+            fileData = fs.readFileSync(path.resolve('./solt_db/' + tableName), 'utf8', (err, jsonString) => {
+                if (err) {
+                    console.log("File read failed:", err)
+                    return
+                }
+                return jsonString;
+            });
+        }
+        else {
+            fs.writeFileSync(path.resolve('./solt_db/' + tableName), '[]', 'utf8', function () {
+                console.log('File with name ' + tableName + ' was created.');
+            });
+            fileData = '[]';
+        }
         return JSON.parse(fileData);
     },
 
