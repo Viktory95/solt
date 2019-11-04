@@ -1,5 +1,7 @@
 import React from 'react';
 import NewBlock from './components/NewBlock';
+import NewAlbum from './components/NewAlbum';
+import NewWord from './components/NewWord';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
 
 class App extends React.Component{
@@ -16,18 +18,24 @@ class App extends React.Component{
 
     handleClickNewBlock = () => {
         this.setState({
-            showNewBlockForm: true
+            showNewBlockForm: true,
+            showNewAlbumForm: false,
+            showNewWordForm: false
         })
     }
 
     handleClickNewAlbum = () => {
         this.setState({
-            showNewAlbumForm: true
+            showNewBlockForm: false,
+            showNewAlbumForm: true,
+            showNewWordForm: false
         })
     }
 
     handleClickNewWord = () => {
         this.setState({
+            showNewBlockForm: false,
+            showNewAlbumForm: false,
             showNewWordForm: true
         })
     }
@@ -41,6 +49,8 @@ class App extends React.Component{
                 <button id="add-word" onClick={this.handleClickNewWord}>Create Word</button>
 
                 {showNewBlockForm && <NewBlock />}
+                {showNewAlbumForm && <NewAlbum />}
+                {showNewWordForm && <NewWord />}
             </div>
         );
     }

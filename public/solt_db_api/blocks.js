@@ -52,32 +52,8 @@ module.exports = {
     getBlocksByTimer: () => {
         let fileData = writer_reader.getData(tableName);
         for(let elNum = 0; elNum < fileData.length; elNum++) {
-            let daysCount = 0;
-            switch (fileData[elNum]['isShow']){
-                case '1d': daysCount = 1; break;
-                case '2d': daysCount = 2; break;
-                case '3d': daysCount = 3; break;
-                case '4d': daysCount = 4; break;
-                case '5d': daysCount = 5; break;
-                case '6d': daysCount = 6; break;
-                case '1w': daysCount = 7; break;
-                case '2w': daysCount = 14; break;
-                case '3w': daysCount = 21; break;
-                case '1m': daysCount = 30; break;
-                case '2m': daysCount = 60; break;
-                case '3m': daysCount = 90; break;
-                case '4m': daysCount = 120; break;
-                case '5m': daysCount = 150; break;
-                case '6m': daysCount = 180; break;
-                case '7m': daysCount = 210; break;
-                case '8m': daysCount = 240; break;
-                case '9m': daysCount = 270; break;
-                case '10m': daysCount = 300; break;
-                case '11m': daysCount = 330; break;
-                case '1y': daysCount = 365; break;
-            }
             let trainDate = new Date(fileData[elNum]['lastDate']);
-            trainDate.setDate(trainDate.getDate() + daysCount);
+            trainDate.setDate(trainDate.getDate() + fileData[elNum]['timePeriod']);
             var today = new Date();
             if(trainDate !== today){
                 delete fileData[elNum];

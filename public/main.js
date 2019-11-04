@@ -6,17 +6,25 @@ const ipcMain = electron.ipcMain;
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
 
+const {
+    ADD_BLOCK,
+    ADD_ALBUM,
+    ADD_WORD
+} = require('../utils/constants');
+
 const path = require('path');
 const url = require('url');
 const isDev = require('electron-is-dev');
 const test_api = require('./solt_db_api/solt_db_api_test/solt_db_api_test');
+
+const block = require('./solt_db_api/blocks');
 
 let mainWindow;
 let imageWindow;
 let settingsWindow;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({width: 900, height: 680, webPreferences: { webSecurity: false}});
+    mainWindow = new BrowserWindow({width: 900, height: 680, webPreferences: { webSecurity: false, nodeIntegration: true}});
     imageWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
     settingsWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
 
@@ -28,6 +36,8 @@ function createWindow() {
     //test_api.create_test();
 
     mainWindow.on('closed', () => mainWindow = null);
+
+    mainWindow.webContents.openDevTools();
 
     imageWindow.on('close', (e) => {
         e.preventDefault();
@@ -57,9 +67,13 @@ app.on('activate', () => {
 ipcMain.on('toggle-image', (event, arg) => {
     imageWindow.show();
     imageWindow.webContents.send('image', arg);
-})
+});
 
 
 ipcMain.on('toggle-settings', () => {
     settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
-})
+});
+
+ipcMain.on(ADD_BLOCK, (event, arg) => {
+    block.createBlock(arg.name, arg.timePeriod, arg.isShow, null);
+});
