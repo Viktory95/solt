@@ -9,15 +9,23 @@ const BrowserWindow = electron.BrowserWindow;
 const {
     ADD_BLOCK,
     ADD_ALBUM,
-    ADD_WORD
+    ADD_WORD,
+    ADD_ALBUM_TO_BLOCK,
+    GET_ALL_ALBUMS,
+    GET_ALL_LANGUAGES,
+    GET_ALL_BLOCKS
 } = require('../utils/constants');
 
 const path = require('path');
 const url = require('url');
 const isDev = require('electron-is-dev');
-const test_api = require('./solt_db_api/solt_db_api_test/solt_db_api_test');
+// const test_api = require('./solt_db_api/solt_db_api_test/solt_db_api_test');
 
 const block = require('./solt_db_api/blocks');
+const album = require('./solt_db_api/albums');
+const word = require('./solt_db_api/words');
+const language = require('./solt_db_api/languages');
+const block_album = require('./solt_db_api/block_album');
 
 let mainWindow;
 let imageWindow;
@@ -77,3 +85,28 @@ ipcMain.on('toggle-settings', () => {
 ipcMain.on(ADD_BLOCK, (event, arg) => {
     block.createBlock(arg.name, arg.timePeriod, arg.isShow, null);
 });
+
+ipcMain.on(ADD_ALBUM, (event, arg) => {
+    album.createAlbum(arg.name, arg.languageNative, arg.languageTranslate);
+});
+
+ipcMain.on(ADD_WORD, (event, arg) => {
+    word.createWord(arg.albumId, arg.wordNative, arg.wordTranslate, arg.image, null, arg.description, null, null);
+});
+
+ipcMain.on(ADD_ALBUM_TO_BLOCK, (event, arg) => {
+    block_album.createBlockAlbum(arg.albumId, arg.blockId);
+});
+
+ipcMain.on(GET_ALL_ALBUMS, (event) => {
+    event.returnValue = album.getAllAlbums();
+});
+
+ipcMain.on(GET_ALL_LANGUAGES, (event) => {
+    event.returnValue = language.getAllLanguages();
+});
+
+ipcMain.on(GET_ALL_BLOCKS, (event) => {
+    event.returnValue = block.getAllBlocks();
+});
+

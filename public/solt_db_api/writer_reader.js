@@ -7,11 +7,11 @@ const path = require('path');
 module.exports = {
     getData : (tableName) => {
         let fileData = null;
-        if (fs.existsSync(path)) {
+        if (fs.existsSync(path.resolve('./solt_db/' + tableName))) {
             fileData = fs.readFileSync(path.resolve('./solt_db/' + tableName), 'utf8', (err, jsonString) => {
                 if (err) {
-                    console.log("File read failed:", err)
-                    return
+                    console.log("File read failed:", err);
+                    return err;
                 }
                 return jsonString;
             });

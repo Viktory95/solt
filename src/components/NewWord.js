@@ -2,9 +2,11 @@
  * Created by Vi on 04.11.2019.
  */
 import React from 'react';
+import Select from "react-select";
 const ipcRenderer = window.electron.ipcRenderer;
 
 const ADD_WORD = 'add-word';
+const GET_ALL_ALBUMS = 'get-all-albums';
 
 class NewWord extends React.Component {
 
@@ -17,15 +19,24 @@ class NewWord extends React.Component {
             image: '',
             description: ''
         };
+
+        let ipcAlbums = ipcRenderer.sendSync(GET_ALL_ALBUMS);
+        this.albums = new Array();
+        for(let albumNum = 0; albumNum < ipcAlbums.length; albumNum++) {
+            this.albums.push({
+                value: ipcAlbums[albumNum].id, label: ipcAlbums[albumNum].name
+            });
+
+        }
     }
 
     handleClickCreateWord = () => {
         ipcRenderer.send(ADD_WORD, this.state);
     }
 
-    updateInputWordAlbumId = (evt) => {
+    updateSelectWordAlbumId = (evt) => {
         this.setState({
-            albumId: evt.target.value
+            albumId: evt.value
         });
     }
 
@@ -57,7 +68,7 @@ class NewWord extends React.Component {
         return (
             <div>
                 <h4>album name</h4>
-                <input onChange={evt => this.updateInputWordAlbumId(evt)}/>
+                <Select options={this.albums} onChange={evt => this.updateSelectWordAlbumId(evt)} />
                 <h4>word native</h4>
                 <input onChange={evt => this.updateInputWordWordNative(evt)}/>
                 <h4>word translate</h4>

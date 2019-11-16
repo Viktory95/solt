@@ -126,13 +126,13 @@ class NewBlock extends React.Component {
         });
     }
 
-    updateInputBlockTimePeriod = (evt) => {
+    updateSelectBlockTimePeriod = (evt) => {
         this.setState({
             timePeriod: evt.value
         });
     }
 
-    updateInputBlockIsShow = (evt) => {
+    updateSelectBlockIsShow = (evt) => {
         this.setState({
             isShow: evt.value
         });
@@ -144,9 +144,9 @@ class NewBlock extends React.Component {
                 <h4>block name</h4>
                 <input onChange={evt => this.updateInputBlockName(evt)}/>
                 <h4>block time period</h4>
-                <Select options={this.optionsTimePeriod} onChange={evt => this.updateInputBlockTimePeriod(evt)} />
+                <Select options={this.optionsTimePeriod} onChange={evt => this.updateSelectBlockTimePeriod(evt)} />
                 <h4>block is visible</h4>
-                <Select options={this.optionsIsShow} onChange={evt => this.updateInputBlockIsShow(evt)} />
+                <Select options={this.optionsIsShow} onChange={evt => this.updateSelectBlockIsShow(evt)} />
                 <button id="new-block-button" onClick={this.handleClickCreateBlock}>Add Block</button>
             </div>
         );

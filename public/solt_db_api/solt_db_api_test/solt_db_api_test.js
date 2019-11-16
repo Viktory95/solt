@@ -14,8 +14,8 @@ module.exports = {
         block.createBlock('block2', '2w', 'false');
         block.createBlock('block2', '2w', 'false');
 
-        language.createLanguage('language1');
-        language.createLanguage('language2');
+        language.createLanguage('ru');
+        language.createLanguage('en');
         language.createLanguage('language3');
         language.createLanguage('language1');
 
