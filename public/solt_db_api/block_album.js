@@ -4,6 +4,7 @@
 const writer_reader = require('./writer_reader');
 const block = require('./blocks');
 const album = require('./albums');
+const log = require('electron-log');
 const tableName = 'block_album.json';
 
 module.exports = {
@@ -32,14 +33,14 @@ module.exports = {
     createBlockAlbum: (albumId, blockId) => {
 
         if(!block.isExists(blockId) || !album.isExists(albumId)) {
-            console.log('Can not create BlockAlbum line. ' +
+            log.warn('Can not create BlockAlbum line. ' +
                 'Block or album does not exists! ' +
                 'Please check block with id = ' + blockId + ' and album with id = ' + albumId);
             return false;
         }
 
         if(module.exports.isExists(albumId, blockId)) {
-            console.log('Can not create BlockAlbum line. ' +
+            log.warn('Can not create BlockAlbum line. ' +
                 'BlockAlbum with albumId = ' + albumId + ' and blockId = ' + blockId + ' already exists.');
             return false;
         }
@@ -54,7 +55,7 @@ module.exports = {
             : fileData[fileData.length-1].id + 1;
         fileData.push(module.exports.blockAlbum(id, albumId, blockId));
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('BlockAlbum with id = ' + id + ' was created.');
+            log.info('BlockAlbum with id = ' + id + ' was created.');
         });
     },
 
@@ -68,7 +69,7 @@ module.exports = {
         }
         delete fileData[delNum];
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('BlockAlbum with id = ' + id + ' was deleted.');
+            log.info('BlockAlbum with id = ' + id + ' was deleted.');
         });
     },
 
@@ -76,7 +77,7 @@ module.exports = {
         let fileData = writer_reader.getData(tableName);
 
         if(!block.isExists(updatedBlockAlbum.blockId) || !album.isExists(updatedBlockAlbum.albumId)) {
-            console.log('Can not update BlockAlbum line. ' +
+            log.warn('Can not update BlockAlbum line. ' +
                 'Block or album does not exists! ' +
                 'Please check block with id = ' + updatedBlockAlbum.blockId + ' and album with id = ' + updatedBlockAlbum.albumId);
             return false;
@@ -90,7 +91,7 @@ module.exports = {
         }
 
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('BlockAlbum with name = ' + updatedBlockAlbum.id + ' was updated.');
+            log.info('BlockAlbum with name = ' + updatedBlockAlbum.id + ' was updated.');
         });
     }
 }

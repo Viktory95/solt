@@ -2,6 +2,7 @@
  * Created by Vi on 12.10.2019.
  */
 const writer_reader = require('./writer_reader');
+const log = require('electron-log');
 const tableName = 'languages.json';
 
 module.exports = {
@@ -29,7 +30,7 @@ module.exports = {
     createLanguage: (name) => {
 
         if(module.exports.isExists(name)) {
-            console.log('Can not create Language line. ' +
+            log.warn('Can not create Language line. ' +
                 'Language with name = ' + name + ' already exists.');
             return false;
         }
@@ -44,7 +45,7 @@ module.exports = {
             : fileData[fileData.length - 1].id + 1;
         fileData.push(module.exports.language(id, name));
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Language with id = ' + id + ' was created.');
+            log.info('Language with id = ' + id + ' was created.');
         });
     },
 
@@ -58,7 +59,7 @@ module.exports = {
         }
         delete fileData[delNum];
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Language with id = ' + id + ' was deleted.');
+            log.info('Language with id = ' + id + ' was deleted.');
         });
     },
 
@@ -70,7 +71,7 @@ module.exports = {
             }
         }
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Language with name = ' + updatedLanguage.name + ' was updated.');
+            log.info('Language with name = ' + updatedLanguage.name + ' was updated.');
         });
     }
 }

@@ -2,6 +2,7 @@
  * Created by Vi on 05.10.2019.
  */
 const electron = require('electron');
+const settings = require('electron-app-settings');
 const ipcMain = electron.ipcMain;
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -13,7 +14,10 @@ const {
     ADD_ALBUM_TO_BLOCK,
     GET_ALL_ALBUMS,
     GET_ALL_LANGUAGES,
-    GET_ALL_BLOCKS
+    GET_ALL_BLOCKS,
+    SETTINGS,
+    GET_SETTINGS,
+    SET_SETTINGS
 } = require('../utils/constants');
 
 const path = require('path');
@@ -32,7 +36,11 @@ let imageWindow;
 let settingsWindow;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({width: 900, height: 680, webPreferences: { webSecurity: false, nodeIntegration: true}});
+    mainWindow = new BrowserWindow({
+        width: 900,
+        height: 680,
+        webPreferences: {webSecurity: false, nodeIntegration: true}
+    });
     imageWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
     settingsWindow = new BrowserWindow({width: 600, height: 600, parent: mainWindow, show: false});
 
@@ -98,6 +106,15 @@ ipcMain.on(ADD_ALBUM_TO_BLOCK, (event, arg) => {
     block_album.createBlockAlbum(arg.albumId, arg.blockId);
 });
 
+ipcMain.on(SET_SETTINGS, (event, arg) => {
+    //TODO: fix settings saving
+    settings.set(SETTINGS,
+        {
+            username: arg.username,
+            userLanguage: arg.userLanguage
+        }, true);
+});
+
 ipcMain.on(GET_ALL_ALBUMS, (event) => {
     event.returnValue = album.getAllAlbums();
 });
@@ -108,5 +125,9 @@ ipcMain.on(GET_ALL_LANGUAGES, (event) => {
 
 ipcMain.on(GET_ALL_BLOCKS, (event) => {
     event.returnValue = block.getAllBlocks();
+});
+
+ipcMain.on(GET_SETTINGS, (event) => {
+    event.returnValue = settings.get(SETTINGS);
 });
 

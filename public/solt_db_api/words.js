@@ -3,6 +3,7 @@
  */
 const writer_reader = require('./writer_reader');
 const album = require('./albums');
+const log = require('electron-log');
 const tableName = '_words.json';
 
 module.exports = {
@@ -37,14 +38,14 @@ module.exports = {
     createWord: (albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic) => {
 
         if(!album.isExists(albumId)) {
-            console.log('Can not create Word line. ' +
+            log.warn('Can not create Word line. ' +
                 'Album does not exists! ' +
                 'Please check album with id = ' + albumId);
             return false;
         }
 
         if(module.exports.isExists(wordNative)) {
-            console.log('Can not create Word line. ' +
+            log.warn('Can not create Word line. ' +
                 'Word with wordNative = ' + wordNative + ' already exists.');
             return false;
         }
@@ -59,7 +60,7 @@ module.exports = {
             : fileData[fileData.length - 1].id + 1;
         fileData.push(module.exports.word(id, albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic));
         return writer_reader.setData(albumId + tableName, fileData, function () {
-            console.log('Word with id = ' + id + ' was created.');
+            log.info('Word with id = ' + id + ' was created.');
         });
     },
 
@@ -73,7 +74,7 @@ module.exports = {
         }
         delete fileData[delNum];
         return writer_reader.setData(albumId + tableName, fileData, function () {
-            console.log('Word with id = ' + id + ' was deleted.');
+            log.info('Word with id = ' + id + ' was deleted.');
         });
     },
 
@@ -81,7 +82,7 @@ module.exports = {
         let fileData = writer_reader.getData(updatedWord.albumId + tableName);
 
         if(!album.isExists(updatedWord.id, updatedWord.albumId)) {
-            console.log('Can not update Word line. ' +
+            log.warn('Can not update Word line. ' +
                 'Album does not exists! ' +
                 'Please check album with id = ' + updatedWord.albumId);
             return false;
@@ -100,7 +101,7 @@ module.exports = {
             }
         }
         return writer_reader.setData(updatedWord.albumId + tableName, fileData, function () {
-            console.log('Word with name = ' + updatedWord.wordNative + ' was updated.');
+            log.info('Word with name = ' + updatedWord.wordNative + ' was updated.');
         });
     }
 }

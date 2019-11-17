@@ -2,6 +2,7 @@
  * Created by Vi on 11.10.2019.
  */
 const writer_reader = require('./writer_reader');
+const log = require('electron-log');
 const tableName = 'blocks.json';
 
 module.exports = {
@@ -64,7 +65,7 @@ module.exports = {
 
     createBlock : (name, timePeriod, isShow, lastDate) => {
         if(module.exports.isExists(name)) {
-            console.log('Can not create Block line. ' +
+            log.warn('Can not create Block line. ' +
                 'Block with name = ' + name + ' already exists.');
             return false;
         }
@@ -79,7 +80,7 @@ module.exports = {
             : fileData[fileData.length-1].id + 1;
         fileData.push(module.exports.block(id, name, timePeriod, isShow, lastDate));
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Block with id = ' + id + ' was created.');
+            log.info('Block with id = ' + id + ' was created.');
         });
     },
 
@@ -93,7 +94,7 @@ module.exports = {
         }
         delete fileData[delNum];
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Block with id = ' + id + ' was deleted.');
+            log.info('Block with id = ' + id + ' was deleted.');
         });
     },
 
@@ -107,7 +108,7 @@ module.exports = {
         }
         delete fileData[delNum];
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Block with name = ' + name + ' was deleted.');
+            log.info('Block with name = ' + name + ' was deleted.');
         });
     },
 
@@ -122,7 +123,7 @@ module.exports = {
             }
         }
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Block with id = ' + updatedBlock.id + ' was updated.');
+            log.info('Block with id = ' + updatedBlock.id + ' was updated.');
         });
     }
 }

@@ -3,6 +3,7 @@
  */
 const writer_reader = require('./writer_reader');
 const language = require('./languages');
+const log = require('electron-log');
 const tableName = 'albums.json';
 
 module.exports = {
@@ -52,14 +53,14 @@ module.exports = {
     createAlbum: (name, languageNative, languageTranslate) => {
 
         if(!language.isExists(languageNative) || !language.isExists(languageTranslate)) {
-            console.log('Can not create Album line. ' +
+            log.warn('Can not create Album line. ' +
                 'Language does not exists! ' +
                 'Please check language with id = ' + languageNative + ' and with id = ' + languageTranslate);
             return false;
         }
 
         if(module.exports.isExists(name)) {
-            console.log('Can not create Album line. ' +
+            log.warn('Can not create Album line. ' +
                 'Album with name = ' + name + ' already exists.');
             return false;
         }
@@ -74,7 +75,7 @@ module.exports = {
             : fileData[fileData.length - 1].id + 1;
         fileData.push(module.exports.album(id, name, languageNative, languageTranslate));
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Album with id = ' + id + ' was created.');
+            log.info('Album with id = ' + id + ' was created.');
         });
     },
 
@@ -88,7 +89,7 @@ module.exports = {
         }
         delete fileData[delNum];
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Album with id = ' + id + ' was deleted.');
+            log.info('Album with id = ' + id + ' was deleted.');
         });
     },
 
@@ -102,7 +103,7 @@ module.exports = {
         }
         delete fileData[delNum];
         return writer_reader.setBlocks(tableName, fileData, function () {
-            console.log('Album with name = ' + name + ' was deleted.');
+            log.info('Album with name = ' + name + ' was deleted.');
         });
     },
 
@@ -110,7 +111,7 @@ module.exports = {
         let fileData = writer_reader.getData(tableName);
 
         if(!language.isExists(updatedAlbum.languageNative) || !language.isExists(updatedAlbum.languageTranslate)) {
-            console.log('Can not update Album line. ' +
+            log.warn('Can not update Album line. ' +
                 'Language does not exists! ' +
                 'Please check language with id = ' + updatedAlbum.languageNative + ' and with id = ' + updatedAlbum.languageTranslate);
             return false;
@@ -124,7 +125,7 @@ module.exports = {
             }
         }
         return writer_reader.setData(tableName, fileData, function () {
-            console.log('Block with id = ' + updatedAlbum.id + ' was updated.');
+            log.info('Block with id = ' + updatedAlbum.id + ' was updated.');
         });
     }
 }

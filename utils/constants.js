@@ -5,5 +5,8 @@ module.exports = {
     ADD_ALBUM_TO_BLOCK: 'add-album-to-block',
     GET_ALL_ALBUMS: 'get-all-albums',
     GET_ALL_LANGUAGES: 'get-all-languages',
-    GET_ALL_BLOCKS: 'get-all-blocks'
+    GET_ALL_BLOCKS: 'get-all-blocks',
+    SETTINGS: 'settings',
+    GET_SETTINGS: 'get-settings',
+    SET_SETTINGS: 'set-settings'
 }

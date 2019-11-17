@@ -3,6 +3,7 @@
  */
 const fs = require('fs');
 const path = require('path');
+const log = require('electron-log');
 
 module.exports = {
     getData : (tableName) => {
@@ -10,7 +11,7 @@ module.exports = {
         if (fs.existsSync(path.resolve('./solt_db/' + tableName))) {
             fileData = fs.readFileSync(path.resolve('./solt_db/' + tableName), 'utf8', (err, jsonString) => {
                 if (err) {
-                    console.log("File read failed:", err);
+                    log.error("File read failed:", err);
                     return err;
                 }
                 return jsonString;
@@ -18,7 +19,7 @@ module.exports = {
         }
         else {
             fs.writeFileSync(path.resolve('./solt_db/' + tableName), '[]', 'utf8', function () {
-                console.log('File with name ' + tableName + ' was created.');
+                log.info('File with name ' + tableName + ' was created.');
             });
             fileData = '[]';
         }
@@ -27,7 +28,7 @@ module.exports = {
 
     setData : (tableName, fileData, callback) => {
         fs.writeFileSync(path.resolve('./solt_db/'+tableName), JSON.stringify(fileData), 'utf8', function () {
-            console.log('Saved.')
+            log.info('Data in db were saved.');
         });
         callback();
         return true;
