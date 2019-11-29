@@ -3,10 +3,12 @@
  */
 import React from 'react';
 import Select from "react-select";
-const ipcRenderer = window.electron.ipcRenderer;
+import constants from '../constants/constants';
+import localizationStrings from '../localozation/LocalizationStrings';
 
-const ADD_WORD = 'add-word';
-const GET_ALL_ALBUMS = 'get-all-albums';
+const ipcRenderer = window.electron.ipcRenderer;
+let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
+localizationStrings.setLanguage(ipcSettings == null || ipcSettings.userLanguage == null ? 'en' : ipcSettings.userLanguage);
 
 class NewWord extends React.Component {
 
@@ -20,7 +22,7 @@ class NewWord extends React.Component {
             description: ''
         };
 
-        let ipcAlbums = ipcRenderer.sendSync(GET_ALL_ALBUMS);
+        let ipcAlbums = ipcRenderer.sendSync(constants.GET_ALL_ALBUMS);
         this.albums = new Array();
         for(let albumNum = 0; albumNum < ipcAlbums.length; albumNum++) {
             this.albums.push({
@@ -31,7 +33,7 @@ class NewWord extends React.Component {
     }
 
     handleClickCreateWord = () => {
-        ipcRenderer.send(ADD_WORD, this.state);
+        ipcRenderer.send(constants.ADD_WORD, this.state);
     }
 
     updateSelectWordAlbumId = (evt) => {
@@ -67,17 +69,17 @@ class NewWord extends React.Component {
     render() {
         return (
             <div>
-                <h4>album name</h4>
+                <h4>{localizationStrings.album_name}</h4>
                 <Select options={this.albums} onChange={evt => this.updateSelectWordAlbumId(evt)} />
-                <h4>word native</h4>
+                <h4>{localizationStrings.word_native}</h4>
                 <input onChange={evt => this.updateInputWordWordNative(evt)}/>
-                <h4>word translate</h4>
+                <h4>{localizationStrings.word_translate}</h4>
                 <input onChange={evt => this.updateInputWordWordTranslate(evt)}/>
-                <h4>image</h4>
+                <h4>{localizationStrings.image}</h4>
                 <input onChange={evt => this.updateInputWordImage(evt)}/>
-                <h4>description</h4>
+                <h4>{localizationStrings.description}</h4>
                 <input onChange={evt => this.updateInputDescription(evt)}/>
-                <button id="new-word-button" onClick={this.handleClickCreateWord}>Add Word</button>
+                <button id="new-word-button" onClick={this.handleClickCreateWord}>{localizationStrings.create_word}</button>
             </div>
         );
     }

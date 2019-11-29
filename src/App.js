@@ -6,10 +6,10 @@ import AlbumToBlockAddition from './components/AlbumToBlockAddition';
 import Settings from './components/Settings';
 import localizationStrings from './localozation/LocalizationStrings';
 import 'bootstrap/dist/css/bootstrap-grid.min.css';
+import constants from './constants/constants';
 
 const ipcRenderer = window.electron.ipcRenderer;
-const GET_SETTINGS = 'get-settings';
-let ipcSettings = ipcRenderer.sendSync(GET_SETTINGS);
+let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
 localizationStrings.setLanguage(ipcSettings == null || ipcSettings.userLanguage == null ? 'en' : ipcSettings.userLanguage);
 
 class App extends React.Component {

@@ -2,7 +2,6 @@
  * Created by Vi on 05.10.2019.
  */
 const electron = require('electron');
-const settings = require('electron-app-settings');
 const ipcMain = electron.ipcMain;
 const app = electron.app;
 const BrowserWindow = electron.BrowserWindow;
@@ -15,7 +14,6 @@ const {
     GET_ALL_ALBUMS,
     GET_ALL_LANGUAGES,
     GET_ALL_BLOCKS,
-    SETTINGS,
     GET_SETTINGS,
     SET_SETTINGS
 } = require('../utils/constants');
@@ -30,6 +28,7 @@ const album = require('./solt_db_api/albums');
 const word = require('./solt_db_api/words');
 const language = require('./solt_db_api/languages');
 const block_album = require('./solt_db_api/block_album');
+const settings = require('./solt_db_api/app_settings');
 
 let mainWindow;
 let imageWindow;
@@ -107,12 +106,7 @@ ipcMain.on(ADD_ALBUM_TO_BLOCK, (event, arg) => {
 });
 
 ipcMain.on(SET_SETTINGS, (event, arg) => {
-    //TODO: fix settings saving
-    settings.set(SETTINGS,
-        {
-            username: arg.username,
-            userLanguage: arg.userLanguage
-        }, true);
+    settings.setAppSettings(arg.username, arg.userLanguage);
 });
 
 ipcMain.on(GET_ALL_ALBUMS, (event) => {
@@ -128,6 +122,6 @@ ipcMain.on(GET_ALL_BLOCKS, (event) => {
 });
 
 ipcMain.on(GET_SETTINGS, (event) => {
-    event.returnValue = settings.get(SETTINGS);
+    event.returnValue = settings.getAppSettings();
 });
 

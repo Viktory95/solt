@@ -3,11 +3,12 @@
  */
 import React from 'react';
 import Select from "react-select";
-const ipcRenderer = window.electron.ipcRenderer;
+import constants from '../constants/constants';
+import localizationStrings from '../localozation/LocalizationStrings';
 
-const ADD_ALBUM_TO_BLOCK = 'add-album-to-block';
-const GET_ALL_ALBUMS = 'get-all-albums';
-const GET_ALL_BLOCKS = 'get-all-blocks';
+const ipcRenderer = window.electron.ipcRenderer;
+let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
+localizationStrings.setLanguage(ipcSettings == null || ipcSettings.userLanguage == null ? 'en' : ipcSettings.userLanguage);
 
 class AlbumToBlockAddition extends React.Component {
 
@@ -18,7 +19,7 @@ class AlbumToBlockAddition extends React.Component {
             blockId: ''
         };
 
-        let ipcAlbums = ipcRenderer.sendSync(GET_ALL_ALBUMS);
+        let ipcAlbums = ipcRenderer.sendSync(constants.GET_ALL_ALBUMS);
         this.albums = new Array();
         for(let albumNum = 0; albumNum < ipcAlbums.length; albumNum++) {
             this.albums.push({
@@ -26,7 +27,7 @@ class AlbumToBlockAddition extends React.Component {
             });
         }
 
-        let ipcBlocks = ipcRenderer.sendSync(GET_ALL_BLOCKS);
+        let ipcBlocks = ipcRenderer.sendSync(constants.GET_ALL_BLOCKS);
         this.blocks = new Array();
         for(let blockNum = 0; blockNum < ipcBlocks.length; blockNum++) {
             this.blocks.push({
@@ -36,7 +37,7 @@ class AlbumToBlockAddition extends React.Component {
     }
 
     handleClickAddAlbumToBlock = () => {
-            ipcRenderer.send(ADD_ALBUM_TO_BLOCK, this.state);
+            ipcRenderer.send(constants.ADD_ALBUM_TO_BLOCK, this.state);
     }
 
     updateSelectBlock = (evt) => {
@@ -54,11 +55,11 @@ class AlbumToBlockAddition extends React.Component {
     render() {
         return (
             <div>
-                <h4>block</h4>
+                <h4>{localizationStrings.block}</h4>
                 <Select options={this.blocks} onChange={evt => this.updateSelectBlock(evt)} />
-                <h4>album</h4>
+                <h4>{localizationStrings.album}</h4>
                 <Select options={this.albums} onChange={evt => this.updateSelectAlbum(evt)} />
-                <button id="add-album-to-block-button" onClick={this.handleClickAddAlbumToBlock}>Add Album to Block</button>
+                <button id="add-album-to-block-button" onClick={this.handleClickAddAlbumToBlock}>{localizationStrings.add_album_to_block}</button>
             </div>
         );
     }

@@ -3,9 +3,12 @@
  */
 import React from 'react';
 import Select from "react-select";
-const ipcRenderer = window.electron.ipcRenderer;
+import constants from '../constants/constants';
+import localizationStrings from '../localozation/LocalizationStrings';
 
-const ADD_BLOCK = 'add-block';
+const ipcRenderer = window.electron.ipcRenderer;
+let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
+localizationStrings.setLanguage(ipcSettings == null || ipcSettings.userLanguage == null ? 'en' : ipcSettings.userLanguage);
 
 class NewBlock extends React.Component {
 
@@ -117,7 +120,7 @@ class NewBlock extends React.Component {
     }
 
     handleClickCreateBlock = () => {
-        ipcRenderer.send(ADD_BLOCK, this.state);
+        ipcRenderer.send(constants.ADD_BLOCK, this.state);
     }
 
     updateInputBlockName = (evt) => {
@@ -141,13 +144,13 @@ class NewBlock extends React.Component {
     render() {
         return (
             <div>
-                <h4>block name</h4>
+                <h4>{localizationStrings.block_name}</h4>
                 <input onChange={evt => this.updateInputBlockName(evt)}/>
-                <h4>block time period</h4>
+                <h4>{localizationStrings.block_time_period}</h4>
                 <Select options={this.optionsTimePeriod} onChange={evt => this.updateSelectBlockTimePeriod(evt)} />
-                <h4>block is visible</h4>
+                <h4>{localizationStrings.block_is_visible}</h4>
                 <Select options={this.optionsIsShow} onChange={evt => this.updateSelectBlockIsShow(evt)} />
-                <button id="new-block-button" onClick={this.handleClickCreateBlock}>Add Block</button>
+                <button id="new-block-button" onClick={this.handleClickCreateBlock}>{localizationStrings.create_block}</button>
             </div>
         );
     }

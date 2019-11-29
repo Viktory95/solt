@@ -3,10 +3,12 @@
  */
 import React from 'react';
 import Select from "react-select";
-const ipcRenderer = window.electron.ipcRenderer;
+import constants from '../constants/constants';
+import localizationStrings from '../localozation/LocalizationStrings';
 
-const ADD_ALBUM = 'add-album';
-const GET_ALL_LANGUAGES = 'get-all-languages';
+const ipcRenderer = window.electron.ipcRenderer;
+let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
+localizationStrings.setLanguage(ipcSettings == null || ipcSettings.userLanguage == null ? 'en' : ipcSettings.userLanguage);
 
 class NewAlbum extends React.Component {
 
@@ -18,7 +20,7 @@ class NewAlbum extends React.Component {
             languageTranslate: ''
         };
 
-        let ipcLanguages = ipcRenderer.sendSync(GET_ALL_LANGUAGES);
+        let ipcLanguages = ipcRenderer.sendSync(constants.GET_ALL_LANGUAGES);
         this.languages = new Array();
         for(let languageNum = 0; languageNum < ipcLanguages.length; languageNum++) {
             this.languages.push({
@@ -30,7 +32,7 @@ class NewAlbum extends React.Component {
 
     handleClickCreateAlbum = () => {
         if(this.state.languageNative !== this.state.languageTranslate) {
-            ipcRenderer.send(ADD_ALBUM, this.state);
+            ipcRenderer.send(constants.ADD_ALBUM, this.state);
         } else {
             //TODO: make error message for users
             console.log('Languages can not be the same');
@@ -58,13 +60,13 @@ class NewAlbum extends React.Component {
     render() {
         return (
             <div>
-                <h4>album name</h4>
+                <h4>{localizationStrings.album_name}</h4>
                 <input onChange={evt => this.updateInputAlbumName(evt)}/>
-                <h4>album language native</h4>
+                <h4>{localizationStrings.album_language_native}</h4>
                 <Select options={this.languages} onChange={evt => this.updateSelectAlbumLanguageNative(evt)} />
-                <h4>album language translate</h4>
+                <h4>{localizationStrings.album_language_translate}</h4>
                 <Select options={this.languages} onChange={evt => this.updateSelectAlbumLanguageTranslate(evt)} />
-                <button id="new-album-button" onClick={this.handleClickCreateAlbum}>Add Album</button>
+                <button id="new-album-button" onClick={this.handleClickCreateAlbum}>{localizationStrings.create_album}</button>
             </div>
         );
     }
