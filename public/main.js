@@ -15,7 +15,10 @@ const {
     GET_ALL_LANGUAGES,
     GET_ALL_BLOCKS,
     GET_SETTINGS,
-    SET_SETTINGS
+    SET_SETTINGS,
+    GET_BLOCK_IS_SHOW,
+    SWITCH_VISIBILITY,
+    DELETE_BLOCK
 } = require('../utils/constants');
 
 const path = require('path');
@@ -109,12 +112,24 @@ ipcMain.on(SET_SETTINGS, (event, arg) => {
     settings.setAppSettings(arg.username, arg.userLanguage);
 });
 
+ipcMain.on(SWITCH_VISIBILITY, (event, arg) => {
+    block.switchVisibility(arg.id);
+});
+
+ipcMain.on(DELETE_BLOCK, (event, arg) => {
+    block.deleteBlockById(arg.id);
+});
+
 ipcMain.on(GET_ALL_ALBUMS, (event) => {
     event.returnValue = album.getAllAlbums();
 });
 
 ipcMain.on(GET_ALL_LANGUAGES, (event) => {
     event.returnValue = language.getAllLanguages();
+});
+
+ipcMain.on(GET_BLOCK_IS_SHOW, (event) => {
+    event.returnValue = block.getBlocksByIsShow(1);
 });
 
 ipcMain.on(GET_ALL_BLOCKS, (event) => {

@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import Select from "react-select";
-import constants from '../constants/constants';
-import localizationStrings from '../localozation/LocalizationStrings';
+import constants from '../../constants/constants';
+import localizationStrings from '../../localozation/LocalizationStrings';
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -40,6 +40,10 @@ class AlbumToBlockAddition extends React.Component {
             ipcRenderer.send(constants.ADD_ALBUM_TO_BLOCK, this.state);
     }
 
+    handleClickCancel = () => {
+        window.location.reload();
+    }
+
     updateSelectBlock = (evt) => {
         this.setState({
             blockId: evt.value
@@ -60,6 +64,7 @@ class AlbumToBlockAddition extends React.Component {
                 <h4>{localizationStrings.album}</h4>
                 <Select options={this.albums} onChange={evt => this.updateSelectAlbum(evt)} />
                 <button id="add-album-to-block-button" onClick={this.handleClickAddAlbumToBlock}>{localizationStrings.add_album_to_block}</button>
+                <button id="cancel-button" onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
             </div>
         );
     }

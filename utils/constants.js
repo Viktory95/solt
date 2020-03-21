@@ -8,5 +8,8 @@ module.exports = {
     GET_ALL_BLOCKS: 'get-all-blocks',
     SETTINGS: 'settings',
     GET_SETTINGS: 'get-settings',
-    SET_SETTINGS: 'set-settings'
+    SET_SETTINGS: 'set-settings',
+    GET_BLOCK_IS_SHOW: 'get-block-is-show',
+    SWITCH_VISIBILITY: 'switch-visibility',
+    DELETE_BLOCK: 'delete-block'
 }

@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import Select from "react-select";
-import constants from '../constants/constants';
-import localizationStrings from '../localozation/LocalizationStrings';
+import constants from '../../constants/constants';
+import localizationStrings from '../../localozation/LocalizationStrings';
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -15,6 +15,7 @@ class NewBlock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id: '',
             name: '',
             timePeriod: '',
             isShow: ''
@@ -117,15 +118,51 @@ class NewBlock extends React.Component {
                 label: 'no'
             }
         ];
+
+        this.selectedIsShow = {
+            value: 0,
+            label: ''
+        };
+
+        this.selectedTimePeriod = {
+            value: 0,
+            label: ''
+        };
+
+        if (props.isShow != null) {
+            this.selectedIsShow = {
+                value: props.isShow,
+                label: props.isShow == 0 ? 'no' : 'yes'
+            };
+        }
+
+        if(props.timePeriod != null) {
+            let timePeriod = '';
+            for(let tpNum = 0; tpNum < this.optionsTimePeriod.length; tpNum++) {
+                if(this.optionsTimePeriod[tpNum].value == props.timePeriod){
+                    timePeriod = this.optionsTimePeriod[tpNum].label;
+                    break;
+                }
+            }
+            this.selectedTimePeriod = {
+                value: props.timePeriod,
+                label: timePeriod
+            };
+        }
     }
 
     handleClickCreateBlock = () => {
         ipcRenderer.send(constants.ADD_BLOCK, this.state);
     }
 
+    handleClickCancel = () => {
+        window.location.reload();
+    }
+
     updateInputBlockName = (evt) => {
         this.setState({
-            name: evt.target.value
+            name: evt.target.value,
+            id: this.props.id
         });
     }
 
@@ -145,12 +182,16 @@ class NewBlock extends React.Component {
         return (
             <div>
                 <h4>{localizationStrings.block_name}</h4>
-                <input onChange={evt => this.updateInputBlockName(evt)}/>
+                <input text={this.props.blockName} onChange={evt => this.updateInputBlockName(evt)}/>
                 <h4>{localizationStrings.block_time_period}</h4>
-                <Select options={this.optionsTimePeriod} onChange={evt => this.updateSelectBlockTimePeriod(evt)} />
+                <Select defaultValue={this.selectedTimePeriod} options={this.optionsTimePeriod}
+                        onChange={evt => this.updateSelectBlockTimePeriod(evt)}/>
                 <h4>{localizationStrings.block_is_visible}</h4>
-                <Select options={this.optionsIsShow} onChange={evt => this.updateSelectBlockIsShow(evt)} />
-                <button id="new-block-button" onClick={this.handleClickCreateBlock}>{localizationStrings.create_block}</button>
+                <Select defaultValue={this.selectedIsShow} options={this.optionsIsShow}
+                        onChange={evt => this.updateSelectBlockIsShow(evt)}/>
+                <button id="new-block-button"
+                        onClick={this.handleClickCreateBlock}>{localizationStrings.ok}</button>
+                <button id="cancel-button" onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
             </div>
         );
     }

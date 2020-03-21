@@ -81,28 +81,26 @@ module.exports = {
 
     deleteAlbumById: (id) => {
         let fileData = writer_reader.getData(tableName);
-        let delNum = -1;
+        let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['id'] === id) {
-                delNum = elNum;
+            if (fileData[elNum]['id'] !== id) {
+                newFileData.push(fileData[elNum]);
             }
         }
-        delete fileData[delNum];
-        return writer_reader.setData(tableName, fileData, function () {
+        return writer_reader.setData(tableName, newFileData, function () {
             log.info('Album with id = ' + id + ' was deleted.');
         });
     },
 
     deleteAlbumByName: (name) => {
         let fileData = writer_reader.getData(tableName);
-        let delNum = -1;
+        let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['name'] === name) {
-                delNum = elNum;
+            if (fileData[elNum]['name'] !== id) {
+                newFileData.push(fileData[elNum]);
             }
         }
-        delete fileData[delNum];
-        return writer_reader.setBlocks(tableName, fileData, function () {
+        return writer_reader.setData(tableName, newFileData, function () {
             log.info('Album with name = ' + name + ' was deleted.');
         });
     },

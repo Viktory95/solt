@@ -6,7 +6,7 @@ const log = require('electron-log');
 const tableName = 'blocks.json';
 
 module.exports = {
-    block : (id, name, timePeriod, isShow, lastDate) => {
+    block: (id, name, timePeriod, isShow, lastDate) => {
         return {
             id: id,
             name: name,
@@ -18,7 +18,7 @@ module.exports = {
 
     isExists: (id) => {
         let fileData = writer_reader.getData(tableName);
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] === id || fileData[elNum]['name'] === id) {
                 return true;
             }
@@ -30,9 +30,24 @@ module.exports = {
         return writer_reader.getData(tableName);
     },
 
+    switchVisibility: (id) => {
+        let fileData = writer_reader.getData(tableName);
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === id) {
+                module.exports.updateBlock({
+                    id: fileData[elNum].id,
+                    name: fileData[elNum].name,
+                    isShow: fileData[elNum].isShow == 0 ? 1 : 0,
+                    timePeriod: fileData[elNum].timePeriod,
+                    lastDate: fileData[elNum].lastDate
+                });
+            }
+        }
+    },
+
     getBlocksByTimePeriod: (timePeriod) => {
         let fileData = writer_reader.getData(tableName);
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['timePeriod'] !== timePeriod) {
                 delete fileData[elNum];
             }
@@ -42,7 +57,7 @@ module.exports = {
 
     getBlocksByIsShow: (isShow) => {
         let fileData = writer_reader.getData(tableName);
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['isShow'] !== isShow) {
                 delete fileData[elNum];
             }
@@ -52,19 +67,19 @@ module.exports = {
 
     getBlocksByTimer: () => {
         let fileData = writer_reader.getData(tableName);
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
             let trainDate = new Date(fileData[elNum]['lastDate']);
             trainDate.setDate(trainDate.getDate() + fileData[elNum]['timePeriod']);
             var today = new Date();
-            if(trainDate !== today){
+            if (trainDate !== today) {
                 delete fileData[elNum];
             }
         }
         return fileData;
     },
 
-    createBlock : (name, timePeriod, isShow, lastDate) => {
-        if(module.exports.isExists(name)) {
+    createBlock: (name, timePeriod, isShow, lastDate) => {
+        if (module.exports.isExists(name)) {
             log.warn('Can not create Block line. ' +
                 'Block with name = ' + name + ' already exists.');
             return false;
@@ -73,48 +88,46 @@ module.exports = {
         let fileData = writer_reader.getData(tableName);
 
         let id = fileData.length == undefined
-            || fileData.length == NaN
-            || fileData.length == null
-            || fileData.length == 0
+        || fileData.length == NaN
+        || fileData.length == null
+        || fileData.length == 0
             ? 0
-            : fileData[fileData.length-1].id + 1;
+            : fileData[fileData.length - 1].id + 1;
         fileData.push(module.exports.block(id, name, timePeriod, isShow, lastDate));
         return writer_reader.setData(tableName, fileData, function () {
             log.info('Block with id = ' + id + ' was created.');
         });
     },
 
-    deleteBlockById : (id) => {
+    deleteBlockById: (id) => {
         let fileData = writer_reader.getData(tableName);
-        let delNum = -1;
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['id'] === id) {
-                delNum = elNum;
+        let newFileData = [];
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] !== id) {
+                newFileData.push(fileData[elNum]);
             }
         }
-        delete fileData[delNum];
-        return writer_reader.setData(tableName, fileData, function () {
+        return writer_reader.setData(tableName, newFileData, function () {
             log.info('Block with id = ' + id + ' was deleted.');
         });
     },
 
-    deleteBlockByName : (name) => {
+    deleteBlockByName: (name) => {
         let fileData = writer_reader.getData(tableName);
-        let delNum = -1;
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['name'] === name) {
-                delNum = elNum;
+        let newFileData = [];
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['name'] !== name) {
+                newFileData.push(fileData[elNum]);
             }
         }
-        delete fileData[delNum];
-        return writer_reader.setData(tableName, fileData, function () {
+        return writer_reader.setData(tableName, newFileData, function () {
             log.info('Block with name = ' + name + ' was deleted.');
         });
     },
 
-    updateBlock : (updatedBlock) => {
+    updateBlock: (updatedBlock) => {
         let fileData = writer_reader.getData(tableName);
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] === updatedBlock.id) {
                 fileData[elNum]['name'] = updatedBlock.name;
                 fileData[elNum]['timePeriod'] = updatedBlock.timePeriod;

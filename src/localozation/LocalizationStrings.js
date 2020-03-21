@@ -24,7 +24,14 @@ let localizationStrings = new LocalizedStrings({
         description: "Description",
         username: "Username",
         language: "Language",
-        save: "Save"
+        save: "Save",
+        cancel: "Cancel",
+        blocks_view: "View Blocks",
+        edit: "Edit",
+        visibility: "Visibility",
+        delete: "Delete",
+        actions: "Actions",
+        ok: "OK"
     },
     ru: {
         create_block: "Добавить Блок",

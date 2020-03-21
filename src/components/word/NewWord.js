@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import Select from "react-select";
-import constants from '../constants/constants';
-import localizationStrings from '../localozation/LocalizationStrings';
+import constants from '../../constants/constants';
+import localizationStrings from '../../localozation/LocalizationStrings';
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -34,6 +34,10 @@ class NewWord extends React.Component {
 
     handleClickCreateWord = () => {
         ipcRenderer.send(constants.ADD_WORD, this.state);
+    }
+
+    handleClickCancel = () => {
+        window.location.reload();
     }
 
     updateSelectWordAlbumId = (evt) => {
@@ -79,7 +83,8 @@ class NewWord extends React.Component {
                 <input onChange={evt => this.updateInputWordImage(evt)}/>
                 <h4>{localizationStrings.description}</h4>
                 <input onChange={evt => this.updateInputDescription(evt)}/>
-                <button id="new-word-button" onClick={this.handleClickCreateWord}>{localizationStrings.create_word}</button>
+                <button id="new-word-button" onClick={this.handleClickCreateWord}>{localizationStrings.ok}</button>
+                <button id="cancel-button" onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
             </div>
         );
     }

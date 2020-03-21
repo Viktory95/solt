@@ -1,5 +1,16 @@
 .App {
-  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.menu-button {
+  padding-left: 7px;
+  padding-right: 7px;
+  margin: 10px;
+  border-color: #e7eaef;
+  border-width: thin;
+  background-color: #080b11;
+  color: white;
 }
 
 .App-logo {
@@ -19,4 +30,9 @@
 
 .App-link {
   color: #09d3ac;
+}
+
+table td {
+  width: 100px;
+  height: 70px;
 }

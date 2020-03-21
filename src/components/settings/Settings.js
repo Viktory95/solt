@@ -3,8 +3,8 @@
  */
 import React from 'react';
 import Select from "react-select";
-import constants from '../constants/constants';
-import localizationStrings from '../localozation/LocalizationStrings';
+import constants from '../../constants/constants';
+import localizationStrings from '../../localozation/LocalizationStrings';
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -36,6 +36,10 @@ class Settings extends React.Component {
         window.location.reload();
     }
 
+    handleClickCancel = () => {
+        window.location.reload();
+    }
+
     updateSelectLanguage = (evt) => {
         this.setState({
             userLanguage: evt.value
@@ -56,6 +60,7 @@ class Settings extends React.Component {
                 <h4>{localizationStrings.language}</h4>
                 <Select options={this.languages} onChange={evt => this.updateSelectLanguage(evt)}/>
                 <button id="save-settings-button" onClick={this.handleClickSaveSettings}>{localizationStrings.save}</button>
+                <button id="cancel-button" onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
             </div>
         );
     }

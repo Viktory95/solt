@@ -51,14 +51,13 @@ module.exports = {
 
     deleteLanguageById: (id) => {
         let fileData = writer_reader.getData(tableName);
-        let delNum = -1;
+        let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['id'] === id) {
-                delNum = elNum;
+            if (fileData[elNum]['id'] !== id) {
+                newFileData.push(fileData[elNum]);
             }
         }
-        delete fileData[delNum];
-        return writer_reader.setData(tableName, fileData, function () {
+        return writer_reader.setData(tableName, newFileData, function () {
             log.info('Language with id = ' + id + ' was deleted.');
         });
     },

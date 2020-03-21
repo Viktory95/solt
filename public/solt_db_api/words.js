@@ -65,15 +65,14 @@ module.exports = {
     },
 
     deleteWordById: (id, albumId) => {
-        let fileData = writer_reader.getData(albumId + tableName);
-        let delNum = -1;
+        let fileData = writer_reader.getData(tableName);
+        let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['id'] === id) {
-                delNum = elNum;
+            if (fileData[elNum]['id'] !== id) {
+                newFileData.push(fileData[elNum]);
             }
         }
-        delete fileData[delNum];
-        return writer_reader.setData(albumId + tableName, fileData, function () {
+        return writer_reader.setData(albumId + tableName, newFileData, function () {
             log.info('Word with id = ' + id + ' was deleted.');
         });
     },
