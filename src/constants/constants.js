@@ -1,5 +1,7 @@
 module.exports = {
     ADD_BLOCK: 'add-block',
+    UPDATE_BLOCK: 'update-block',
+    DELETE_BLOCK: 'delete-block',
     ADD_ALBUM: 'add-album',
     ADD_WORD: 'add-word',
     ADD_ALBUM_TO_BLOCK: 'add-album-to-block',
@@ -10,6 +12,5 @@ module.exports = {
     GET_SETTINGS: 'get-settings',
     SET_SETTINGS: 'set-settings',
     GET_BLOCK_IS_SHOW: 'get-block-is-show',
-    SWITCH_VISIBILITY: 'switch-visibility',
-    DELETE_BLOCK: 'delete-block'
+    SWITCH_VISIBILITY: 'switch-visibility'
 }

@@ -2,7 +2,8 @@
  * Created by Vi on 22.10.2019.
  */
 import React from 'react';
-import Select from "react-select";
+import Select from 'react-select';
+import BlockLine from './BlockLine';
 import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';
 
@@ -15,10 +16,12 @@ class NewBlock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: '',
-            name: '',
-            timePeriod: '',
-            isShow: ''
+            id: props.id ? props.id : '',
+            name: props.name ? props.name : '',
+            timePeriod: props.timePeriod ? props.timePeriod : '',
+            isShow: props.isShow ? props.isShow : '',
+            isSaved: false,
+            isCanceled: false
         };
 
         this.optionsTimePeriod = [
@@ -136,10 +139,10 @@ class NewBlock extends React.Component {
             };
         }
 
-        if(props.timePeriod != null) {
+        if (props.timePeriod != null) {
             let timePeriod = '';
-            for(let tpNum = 0; tpNum < this.optionsTimePeriod.length; tpNum++) {
-                if(this.optionsTimePeriod[tpNum].value == props.timePeriod){
+            for (let tpNum = 0; tpNum < this.optionsTimePeriod.length; tpNum++) {
+                if (this.optionsTimePeriod[tpNum].value == props.timePeriod) {
                     timePeriod = this.optionsTimePeriod[tpNum].label;
                     break;
                 }
@@ -151,12 +154,21 @@ class NewBlock extends React.Component {
         }
     }
 
-    handleClickCreateBlock = () => {
-        ipcRenderer.send(constants.ADD_BLOCK, this.state);
+    handleClickCreateOrUpdateBlock = () => {
+        if(this.state.id) {
+            ipcRenderer.send(constants.UPDATE_BLOCK, this.state);
+        } else {
+            ipcRenderer.send(constants.ADD_BLOCK, this.state);
+        }
+        this.setState({
+            isSaved: true
+        });
     }
 
     handleClickCancel = () => {
-        window.location.reload();
+        this.setState({
+            isSaved: true
+        });
     }
 
     updateInputBlockName = (evt) => {
@@ -179,21 +191,45 @@ class NewBlock extends React.Component {
     }
 
     render() {
+        const {
+            id,
+            name,
+            timePeriod,
+            isShow
+        } = this.state;
+
+        if (this.state.isSaved) return (<div>
+                <BlockLine key={id}
+                       id={id}
+                       blockName={name}
+                       timePeriod={timePeriod}
+                       isShow={isShow}/>
+            </div>);
+
         return (
             <div>
-                <h4>{localizationStrings.block_name}</h4>
-                <input text={this.props.blockName} onChange={evt => this.updateInputBlockName(evt)}/>
-                <h4>{localizationStrings.block_time_period}</h4>
-                <Select defaultValue={this.selectedTimePeriod} options={this.optionsTimePeriod}
-                        onChange={evt => this.updateSelectBlockTimePeriod(evt)}/>
-                <h4>{localizationStrings.block_is_visible}</h4>
-                <Select defaultValue={this.selectedIsShow} options={this.optionsIsShow}
-                        onChange={evt => this.updateSelectBlockIsShow(evt)}/>
-                <button id="new-block-button"
-                        onClick={this.handleClickCreateBlock}>{localizationStrings.ok}</button>
-                <button id="cancel-button" onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                <tr>
+                    <td>
+                        <input text={this.props.blockName} onChange={evt => this.updateInputBlockName(evt)}/>
+                    </td>
+                    <td>
+                        <Select defaultValue={this.selectedTimePeriod} options={this.optionsTimePeriod}
+                                onChange={evt => this.updateSelectBlockTimePeriod(evt)}/>
+                    </td>
+                    <td>
+                        <Select defaultValue={this.selectedIsShow} options={this.optionsIsShow}
+                                onChange={evt => this.updateSelectBlockIsShow(evt)}/>
+                    </td>
+                    <td>
+                        <button id="new-block-button"
+                                onClick={this.handleClickCreateOrUpdateBlock}>{localizationStrings.save}</button>
+                        <button id="cancel-button"
+                                onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                    </td>
+                </tr>
             </div>
-        );
+        )
+            ;
     }
 }
 

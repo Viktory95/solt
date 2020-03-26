@@ -17,11 +17,11 @@ class BlocksView extends React.Component {
         let ipcBlocks = ipcRenderer.sendSync(constants.GET_ALL_BLOCKS);
 
         let table = [];
-        table.push(<tr><th>{localizationStrings.block_name}</th><th>{localizationStrings.actions}</th></tr>)
 
         ipcBlocks.forEach((ipcBlock) => {
-            table.push(<tr>{<BlockLine key={ipcBlock.id} id={ipcBlock.id} blockName={ipcBlock.name} timePeriod={ipcBlock.timePeriod}
-                                      isShow={ipcBlock.isShow}/>}</tr>);
+            table.push(<tr id={ipcBlock.id}>{<BlockLine key={ipcBlock.id} id={ipcBlock.id} blockName={ipcBlock.name}
+                                       timePeriod={ipcBlock.timePeriod}
+                                       isShow={ipcBlock.isShow}/>}</tr>);
         });
         return table;
     }
@@ -29,8 +29,16 @@ class BlocksView extends React.Component {
     render() {
         return (
             <div>
+                <button className="create-block-button" id="block-edit"
+                        onClick={this.handleClickBlockCreate}>{localizationStrings.create}</button>
                 {
                     <table>
+                        <tr>
+                            <th>{localizationStrings.block_name}</th>
+                            <th>{localizationStrings.block_time_period}</th>
+                            <th>{localizationStrings.block_is_visible}</th>
+                            <th>{localizationStrings.actions}</th>
+                        </tr>
                         <tbody>
                             {this.createTable()}
                         </tbody>

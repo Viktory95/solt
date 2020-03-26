@@ -8,6 +8,7 @@ const BrowserWindow = electron.BrowserWindow;
 
 const {
     ADD_BLOCK,
+    UPDATE_BLOCK,
     ADD_ALBUM,
     ADD_WORD,
     ADD_ALBUM_TO_BLOCK,
@@ -94,6 +95,10 @@ ipcMain.on('toggle-settings', () => {
 
 ipcMain.on(ADD_BLOCK, (event, arg) => {
     block.createBlock(arg.name, arg.timePeriod, arg.isShow, null);
+});
+
+ipcMain.on(UPDATE_BLOCK, (event, arg) => {
+    block.updateBlock({id: arg.id, name: arg.name, timePeriod: arg.timePeriod, isShow: arg.isShow});
 });
 
 ipcMain.on(ADD_ALBUM, (event, arg) => {

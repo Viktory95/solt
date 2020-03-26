@@ -129,10 +129,11 @@ module.exports = {
         let fileData = writer_reader.getData(tableName);
         for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] === updatedBlock.id) {
-                fileData[elNum]['name'] = updatedBlock.name;
-                fileData[elNum]['timePeriod'] = updatedBlock.timePeriod;
-                fileData[elNum]['isShow'] = updatedBlock.isShow;
-                fileData[elNum]['lastDate'] = updatedBlock.lastDate;
+                if (updatedBlock.name) fileData[elNum]['name'] = updatedBlock.name;
+                if (updatedBlock.timePeriod) fileData[elNum]['timePeriod'] = updatedBlock.timePeriod;
+                if (updatedBlock.isShow) fileData[elNum]['isShow'] = updatedBlock.isShow;
+                //TODO: make date and time
+                fileData[elNum]['lastDate'] = null;
             }
         }
         return writer_reader.setData(tableName, fileData, function () {

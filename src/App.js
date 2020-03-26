@@ -1,8 +1,5 @@
 import styles from './App.css';
 import React from 'react';
-import NewBlock from './components/block/NewBlock';
-import NewAlbum from './components/album/NewAlbum';
-import NewWord from './components/word/NewWord';
 import AlbumToBlockAddition from './components/album/AlbumToBlockAddition';
 import Settings from './components/settings/Settings';
 import Block from './components/block/Block';
@@ -22,53 +19,14 @@ class App extends React.Component {
         super();
 
         this.state = {
-            showNewBlockForm: false,
-            showNewAlbumForm: false,
-            showNewWordForm: false,
             showAlbumToBlockAdditionForm: false,
             showSettingsForm: false,
             showAllBlocks: false
         }
     }
 
-    handleClickNewBlock = () => {
-        this.setState({
-            showNewBlockForm: true,
-            showNewAlbumForm: false,
-            showNewWordForm: false,
-            showAlbumToBlockAdditionForm: false,
-            showSettingsForm: false,
-            showAllBlocks: false
-        });
-    }
-
-    handleClickNewAlbum = () => {
-        this.setState({
-            showNewBlockForm: false,
-            showNewAlbumForm: true,
-            showNewWordForm: false,
-            showAlbumToBlockAdditionForm: false,
-            showSettingsForm: false,
-            showAllBlocks: false
-        });
-    }
-
-    handleClickNewWord = () => {
-        this.setState({
-            showNewBlockForm: false,
-            showNewAlbumForm: false,
-            showNewWordForm: true,
-            showAlbumToBlockAdditionForm: false,
-            showSettingsForm: false,
-            showAllBlocks: false
-        });
-    }
-
     handleClickAlbumToBlockAddition = () => {
         this.setState({
-            showNewBlockForm: false,
-            showNewAlbumForm: false,
-            showNewWordForm: false,
             showAlbumToBlockAdditionForm: true,
             showSettingsForm: false,
             showAllBlocks: false
@@ -77,9 +35,6 @@ class App extends React.Component {
 
     handleClickSettingsUpdating = () => {
         this.setState({
-            showNewBlockForm: false,
-            showNewAlbumForm: false,
-            showNewWordForm: false,
             showAlbumToBlockAdditionForm: false,
             showSettingsForm: true,
             showAllBlocks: false
@@ -88,9 +43,6 @@ class App extends React.Component {
 
     handleClickBlocksView = () => {
         this.setState({
-            showNewBlockForm: false,
-            showNewAlbumForm: false,
-            showNewWordForm: false,
             showAlbumToBlockAdditionForm: false,
             showSettingsForm: false,
             showAllBlocks: true
@@ -124,21 +76,12 @@ class App extends React.Component {
 
     render() {
         const {
-            showNewBlockForm,
-            showNewAlbumForm,
-            showNewWordForm,
             showAlbumToBlockAdditionForm,
             showSettingsForm,
             showAllBlocks
         } = this.state;
         return (
             <div className="App">
-                <button className="menu-button" id="add-block"
-                        onClick={this.handleClickNewBlock}>{localizationStrings.create_block}</button>
-                <button className="menu-button" id="add-album"
-                        onClick={this.handleClickNewAlbum}>{localizationStrings.create_album}</button>
-                <button className="menu-button" id="add-word"
-                        onClick={this.handleClickNewWord}>{localizationStrings.create_word}</button>
                 <button className="menu-button" id="add-album-to-block"
                         onClick={this.handleClickAlbumToBlockAddition}>{localizationStrings.add_album_to_block}
                 </button>
@@ -147,17 +90,11 @@ class App extends React.Component {
                 <button className="menu-button" id="blocks-view"
                         onClick={this.handleClickBlocksView}>{localizationStrings.blocks_view}</button>
 
-                {showNewBlockForm && <NewBlock />}
-                {showNewAlbumForm && <NewAlbum />}
-                {showNewWordForm && <NewWord />}
                 {showAlbumToBlockAdditionForm && <AlbumToBlockAddition />}
                 {showSettingsForm && <Settings />}
                 {showAllBlocks && <BlocksView />}
                 <div>
-                    {!showNewBlockForm
-                    && !showNewAlbumForm
-                    && !showNewWordForm
-                    && !showAlbumToBlockAdditionForm
+                    {!showAlbumToBlockAdditionForm
                     && !showSettingsForm
                     && !showAllBlocks
                     && <table>
