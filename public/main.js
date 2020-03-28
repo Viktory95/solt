@@ -9,7 +9,12 @@ const BrowserWindow = electron.BrowserWindow;
 const {
     ADD_BLOCK,
     UPDATE_BLOCK,
+    DELETE_BLOCK,
+    GET_BLOCK_BY_ID,
     ADD_ALBUM,
+    UPDATE_ALBUM,
+    DELETE_ALBUM,
+    GET_BLOCK_ALBUM_BY_ALBUM_ID,
     ADD_WORD,
     ADD_ALBUM_TO_BLOCK,
     GET_ALL_ALBUMS,
@@ -18,8 +23,7 @@ const {
     GET_SETTINGS,
     SET_SETTINGS,
     GET_BLOCK_IS_SHOW,
-    SWITCH_VISIBILITY,
-    DELETE_BLOCK
+    SWITCH_VISIBILITY
 } = require('../utils/constants');
 
 const path = require('path');
@@ -93,6 +97,7 @@ ipcMain.on('toggle-settings', () => {
     settingsWindow.isVisible() ? settingsWindow.hide() : settingsWindow.show();
 });
 
+/*BLOCK*/
 ipcMain.on(ADD_BLOCK, (event, arg) => {
     block.createBlock(arg.name, arg.timePeriod, arg.isShow, null);
 });
@@ -101,10 +106,40 @@ ipcMain.on(UPDATE_BLOCK, (event, arg) => {
     block.updateBlock({id: arg.id, name: arg.name, timePeriod: arg.timePeriod, isShow: arg.isShow});
 });
 
+ipcMain.on(DELETE_BLOCK, (event, arg) => {
+    block.deleteBlockById(arg.id);
+});
+
+ipcMain.on(GET_BLOCK_BY_ID, (event, arg) => {
+    block.getBlockById(arg.id);
+});
+
+ipcMain.on(SWITCH_VISIBILITY, (event, arg) => {
+    block.switchVisibility(arg.id);
+});
+
+/*ALBUM*/
 ipcMain.on(ADD_ALBUM, (event, arg) => {
     album.createAlbum(arg.name, arg.languageNative, arg.languageTranslate);
 });
 
+ipcMain.on(UPDATE_ALBUM, (event, arg) => {
+    album.updateAlbum({id: arg.id, name: arg.name, languageNative: arg.languageNative, languageTranslate: arg.languageTranslate});
+});
+
+ipcMain.on(DELETE_ALBUM, (event, arg) => {
+    album.deleteAlbumById(arg.id);
+});
+
+ipcMain.on(GET_BLOCK_ALBUM_BY_ALBUM_ID, (event, arg) => {
+    block_album.getBlockAlbumByAlbumId(arg.albumId);
+});
+
+ipcMain.on(GET_ALL_ALBUMS, (event) => {
+    event.returnValue = album.getAllAlbums();
+});
+
+/*WORD*/
 ipcMain.on(ADD_WORD, (event, arg) => {
     word.createWord(arg.albumId, arg.wordNative, arg.wordTranslate, arg.image, null, arg.description, null, null);
 });
@@ -115,18 +150,6 @@ ipcMain.on(ADD_ALBUM_TO_BLOCK, (event, arg) => {
 
 ipcMain.on(SET_SETTINGS, (event, arg) => {
     settings.setAppSettings(arg.username, arg.userLanguage);
-});
-
-ipcMain.on(SWITCH_VISIBILITY, (event, arg) => {
-    block.switchVisibility(arg.id);
-});
-
-ipcMain.on(DELETE_BLOCK, (event, arg) => {
-    block.deleteBlockById(arg.id);
-});
-
-ipcMain.on(GET_ALL_ALBUMS, (event) => {
-    event.returnValue = album.getAllAlbums();
 });
 
 ipcMain.on(GET_ALL_LANGUAGES, (event) => {

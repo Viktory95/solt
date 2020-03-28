@@ -92,5 +92,17 @@ module.exports = {
         return writer_reader.setData(tableName, fileData, function () {
             log.info('BlockAlbum with name = ' + updatedBlockAlbum.id + ' was updated.');
         });
+    },
+
+    getBlockAlbumByAlbumId: (albumId) => {
+        let fileData = writer_reader.getData(tableName);
+        let blocksAlbum = [];
+
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['albumId'] === albumId) {
+                blocksAlbum.push(fileData[elNum]);
+            }
+        }
+        return blocksAlbum;
     }
 }

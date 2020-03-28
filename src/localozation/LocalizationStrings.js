@@ -31,7 +31,9 @@ let localizationStrings = new LocalizedStrings({
         visibility: "Visibility",
         delete: "Delete",
         actions: "Actions",
-        ok: "OK"
+        ok: "OK",
+        create: "Create",
+        albums_view: "View Albums"
     },
     ru: {
         create_block: "Добавить Блок",

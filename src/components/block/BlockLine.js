@@ -2,7 +2,6 @@
  * Created by Vi on 21.03.2020.
  */
 import React from 'react';
-import ReactDOM from 'react-dom';
 import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';
 import NewBlock from './NewBlock';
@@ -25,9 +24,105 @@ class BlockLine extends React.Component {
             hideComponent: false
         };
 
-        this.blockData = {
-            id: this.props.id
-        };
+        this.optionsTimePeriod = [
+            {
+                value: 1,
+                label: '1 day'
+            },
+            {
+                value: 2,
+                label: '2 day'
+            },
+            {
+                value: 3,
+                label: '3 day'
+            },
+            {
+                value: 4,
+                label: '4 day'
+            },
+            {
+                value: 5,
+                label: '5 day'
+            },
+            {
+                value: 6,
+                label: '6 day'
+            },
+            {
+                value: 7,
+                label: '1 week'
+            },
+            {
+                value: 14,
+                label: '2 week'
+            },
+            {
+                value: 21,
+                label: '3 week'
+            },
+            {
+                value: 30,
+                label: '1 month'
+            },
+            {
+                value: 60,
+                label: '2 month'
+            },
+            {
+                value: 90,
+                label: '3 month'
+            },
+            {
+                value: 120,
+                label: '4 month'
+            },
+            {
+                value: 150,
+                label: '5 month'
+            },
+            {
+                value: 180,
+                label: '6 month'
+            },
+            {
+                value: 210,
+                label: '7 month'
+            },
+            {
+                value: 240,
+                label: '8 month'
+            },
+            {
+                value: 270,
+                label: '9 month'
+            },
+            {
+                value: 300,
+                label: '10 month'
+            },
+            {
+                value: 330,
+                label: '11 month'
+            },
+            {
+                value: 365,
+                label: '1 year'
+            }
+        ];
+
+        if (props.timePeriod != null) {
+            let timePeriod = '';
+            for (let tpNum = 0; tpNum < this.optionsTimePeriod.length; tpNum++) {
+                if (this.optionsTimePeriod[tpNum].value == props.timePeriod) {
+                    timePeriod = this.optionsTimePeriod[tpNum].label;
+                    break;
+                }
+            }
+            this.selectedTimePeriod = {
+                value: timePeriod
+            };
+        }
     }
 
     handleClickBlockEdit = () => {
@@ -37,14 +132,14 @@ class BlockLine extends React.Component {
     }
 
     handleClickBlockVisibility = () => {
-        ipcRenderer.send(constants.SWITCH_VISIBILITY, this.blockData);
+        ipcRenderer.send(constants.SWITCH_VISIBILITY, {id: this.state.id});
         this.setState({
-            isShow: !this.state.isShow
+            isShow: this.state.isShow == 0 ? 1 : 0
         });
     }
 
     handleClickBlockDelete = () => {
-        ipcRenderer.send(constants.DELETE_BLOCK, this.blockData);
+        ipcRenderer.send(constants.DELETE_BLOCK, {id: this.state.id});
         this.setState({
             hideComponent: true
         });
@@ -73,8 +168,8 @@ class BlockLine extends React.Component {
         return (
             <div className="BlockLine">
                 <td>{name}</td>
-                <td>{timePeriod}</td>
-                <td>{isShow}</td>
+                <td>{this.selectedTimePeriod.value}</td>
+                <td>{isShow == 0 ? 'no' : 'yes'}</td>
                 <td>
                     <button className="edit-block-button" id="block-edit"
                             onClick={this.handleClickBlockEdit}>{localizationStrings.edit}</button>

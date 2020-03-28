@@ -51,7 +51,6 @@ module.exports = {
     },
 
     createAlbum: (name, languageNative, languageTranslate) => {
-
         if(!language.isExists(languageNative) || !language.isExists(languageTranslate)) {
             log.warn('Can not create Album line. ' +
                 'Language does not exists! ' +

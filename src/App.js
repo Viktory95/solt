@@ -4,6 +4,7 @@ import AlbumToBlockAddition from './components/album/AlbumToBlockAddition';
 import Settings from './components/settings/Settings';
 import Block from './components/block/Block';
 import BlocksView from './components/block/BlocksView';
+import AlbumsView from './components/album/AlbumsView';
 import localizationStrings from './localozation/LocalizationStrings';
 import constants from './constants/constants';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,31 +22,32 @@ class App extends React.Component {
         this.state = {
             showAlbumToBlockAdditionForm: false,
             showSettingsForm: false,
-            showAllBlocks: false
+            showAllBlocks: false,
+            showAllAlbums: false
         }
     }
 
     handleClickAlbumToBlockAddition = () => {
         this.setState({
-            showAlbumToBlockAdditionForm: true,
-            showSettingsForm: false,
-            showAllBlocks: false
+            showAlbumToBlockAdditionForm: true
         });
     }
 
     handleClickSettingsUpdating = () => {
         this.setState({
-            showAlbumToBlockAdditionForm: false,
-            showSettingsForm: true,
-            showAllBlocks: false
+            showSettingsForm: true
         });
     }
 
     handleClickBlocksView = () => {
         this.setState({
-            showAlbumToBlockAdditionForm: false,
-            showSettingsForm: false,
             showAllBlocks: true
+        });
+    }
+
+    handleClickAlbumsView = () => {
+        this.setState({
+            showAllAlbums: true
         });
     }
 
@@ -59,7 +61,6 @@ class App extends React.Component {
         let ipcBlocksCounter = 0;
 
         ipcBlocks.forEach((ipcBlock) => {
-
             children.push(<td>{<Block key={ipcBlock.id} blockName={ipcBlock.name} timePeriod={ipcBlock.timePeriod}
                                       isShow={ipcBlock.isShow}/>}</td>);
             columnCounter++;
@@ -78,7 +79,8 @@ class App extends React.Component {
         const {
             showAlbumToBlockAdditionForm,
             showSettingsForm,
-            showAllBlocks
+            showAllBlocks,
+            showAllAlbums
         } = this.state;
         return (
             <div className="App">
@@ -89,10 +91,13 @@ class App extends React.Component {
                         onClick={this.handleClickSettingsUpdating}>{localizationStrings.settings}</button>
                 <button className="menu-button" id="blocks-view"
                         onClick={this.handleClickBlocksView}>{localizationStrings.blocks_view}</button>
+                <button className="menu-button" id="albums-view"
+                        onClick={this.handleClickAlbumsView}>{localizationStrings.albums_view}</button>
 
                 {showAlbumToBlockAdditionForm && <AlbumToBlockAddition />}
                 {showSettingsForm && <Settings />}
                 {showAllBlocks && <BlocksView />}
+                {showAllAlbums && <AlbumsView />}
                 <div>
                     {!showAlbumToBlockAdditionForm
                     && !showSettingsForm

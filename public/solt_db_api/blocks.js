@@ -45,24 +45,36 @@ module.exports = {
         }
     },
 
-    getBlocksByTimePeriod: (timePeriod) => {
+    getBlockById: (id) => {
         let fileData = writer_reader.getData(tableName);
         for (let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['timePeriod'] !== timePeriod) {
-                delete fileData[elNum];
+            if (fileData[elNum]['id'] === id) {
+                return fileData[elNum];
             }
         }
-        return fileData;
+        return null;
+    },
+
+    getBlocksByTimePeriod: (timePeriod) => {
+        let fileData = writer_reader.getData(tableName);
+        let newFileData = [];
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['timePeriod'] === timePeriod) {
+                newFileData.push(fileData[elNum]);
+            }
+        }
+        return newFileData;
     },
 
     getBlocksByIsShow: (isShow) => {
         let fileData = writer_reader.getData(tableName);
+        let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['isShow'] !== isShow) {
-                delete fileData[elNum];
+            if (fileData[elNum]['isShow'] === isShow) {
+                newFileData.push(fileData[elNum]);
             }
         }
-        return fileData;
+        return newFileData;
     },
 
     getBlocksByTimer: () => {
@@ -129,9 +141,9 @@ module.exports = {
         let fileData = writer_reader.getData(tableName);
         for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] === updatedBlock.id) {
-                if (updatedBlock.name) fileData[elNum]['name'] = updatedBlock.name;
-                if (updatedBlock.timePeriod) fileData[elNum]['timePeriod'] = updatedBlock.timePeriod;
-                if (updatedBlock.isShow) fileData[elNum]['isShow'] = updatedBlock.isShow;
+                fileData[elNum]['name'] = updatedBlock.name;
+                fileData[elNum]['timePeriod'] = updatedBlock.timePeriod;
+                fileData[elNum]['isShow'] = updatedBlock.isShow;
                 //TODO: make date and time
                 fileData[elNum]['lastDate'] = null;
             }

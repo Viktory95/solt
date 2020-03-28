@@ -17,7 +17,7 @@ class NewBlock extends React.Component {
         super(props);
         this.state = {
             id: props.id ? props.id : '',
-            name: props.name ? props.name : '',
+            name: props.blockName ? props.blockName : '',
             timePeriod: props.timePeriod ? props.timePeriod : '',
             isShow: props.isShow ? props.isShow : '',
             isSaved: false,
@@ -163,6 +163,7 @@ class NewBlock extends React.Component {
         this.setState({
             isSaved: true
         });
+        this.props.handler(false);
     }
 
     handleClickCancel = () => {
@@ -210,7 +211,7 @@ class NewBlock extends React.Component {
             <div>
                 <tr>
                     <td>
-                        <input text={this.props.blockName} onChange={evt => this.updateInputBlockName(evt)}/>
+                        <input value={name} onChange={evt => this.updateInputBlockName(evt)}/>
                     </td>
                     <td>
                         <Select defaultValue={this.selectedTimePeriod} options={this.optionsTimePeriod}
