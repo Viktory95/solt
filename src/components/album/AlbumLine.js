@@ -5,6 +5,7 @@ import React from 'react';
 import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';
 import NewAlbum from './NewAlbum';
+import AlbumToBlockActions from './AlbumToBlockActions';
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -18,11 +19,15 @@ class AlbumLine extends React.Component {
         this.state = {
             id: this.props.id,
             name: this.props.name,
+            languageNativeId: this.props.languageNativeId,
+            languageTranslateId: this.props.languageTranslateId,
             languageNative: this.props.languageNative,
             languageTranslate: this.props.languageTranslate,
             blocks: this.props.blocks,
             showEditAlbumForm: false,
-            hideComponent: false
+            hideComponent: false,
+            isAdd: false,
+            isDelete: false
         };
     }
 
@@ -33,11 +38,15 @@ class AlbumLine extends React.Component {
     }
 
     handleClickAddToBlock = () => {
-
+        this.setState({
+            isAdd: true
+        });
     }
 
     handleClickDeleteFromBlock = () => {
-
+        this.setState({
+            isDelete: true
+        });
     }
 
     handleClickAlbumDelete = () => {
@@ -51,24 +60,62 @@ class AlbumLine extends React.Component {
         const {
             id,
             name,
+            languageNativeId,
+            languageTranslateId,
             languageNative,
             languageTranslate,
             blocks,
             showEditAlbumForm,
-            hideComponent
+            hideComponent,
+            isAdd,
+            isDelete
         } = this.state;
 
-        if (hideComponent === true) {
+        if (hideComponent) {
             return false;
         }
 
-        if (showEditAlbumForm === true) {
+        if (showEditAlbumForm) {
             return <div className="BlockLine">
                 <NewAlbum key={id}
                           id={id}
                           name={name}
+                          languageNativeId={languageNativeId}
+                          languageTranslateId={languageTranslateId}
                           languageNative={languageNative}
-                          languageTranslate={languageTranslate}/>
+                          languageTranslate={languageTranslate}
+                          blocks={blocks}
+                          handler={this.props.handler}/>
+            </div>;
+        }
+
+        if (isAdd) {
+            return <div className="BlockLine">
+                <AlbumToBlockActions key={id}
+                                     name={name}
+                                     languageNativeId={languageNativeId}
+                                     languageTranslateId={languageTranslateId}
+                                     languageNative={languageNative}
+                                     languageTranslate={languageTranslate}
+                                     blocks={blocks}
+                                     albumId={id}
+                                     isAdd={isAdd}
+                                     handler={this.props.handler}/>
+            </div>;
+        }
+
+        if (isDelete) {
+            return <div className="BlockLine">
+                <AlbumToBlockActions key={id}
+                                     name={name}
+                                     languageNativeId={languageNativeId}
+                                     languageTranslateId={languageTranslateId}
+                                     languageNative={languageNative}
+                                     languageTranslate={languageTranslate}
+                                     blocks={blocks}
+                                     albumId={id}
+                                     isAdd={isDelete}
+                                     handler={this.props.handler}/>
             </div>;
         }
 

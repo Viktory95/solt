@@ -15,6 +15,7 @@ const {
     UPDATE_ALBUM,
     DELETE_ALBUM,
     GET_BLOCK_ALBUM_BY_ALBUM_ID,
+    DELETE_ALBUM_FROM_BLOCK,
     ADD_WORD,
     ADD_ALBUM_TO_BLOCK,
     GET_ALL_ALBUMS,
@@ -111,11 +112,19 @@ ipcMain.on(DELETE_BLOCK, (event, arg) => {
 });
 
 ipcMain.on(GET_BLOCK_BY_ID, (event, arg) => {
-    block.getBlockById(arg.id);
+    event.returnValue = block.getBlockById(arg.id);
 });
 
 ipcMain.on(SWITCH_VISIBILITY, (event, arg) => {
     block.switchVisibility(arg.id);
+});
+
+ipcMain.on(GET_BLOCK_IS_SHOW, (event) => {
+    event.returnValue = block.getBlocksByIsShow(1);
+});
+
+ipcMain.on(GET_ALL_BLOCKS, (event) => {
+    event.returnValue = block.getAllBlocks();
 });
 
 /*ALBUM*/
@@ -132,20 +141,24 @@ ipcMain.on(DELETE_ALBUM, (event, arg) => {
 });
 
 ipcMain.on(GET_BLOCK_ALBUM_BY_ALBUM_ID, (event, arg) => {
-    block_album.getBlockAlbumByAlbumId(arg.albumId);
+    event.returnValue = block_album.getBlockAlbumByAlbumId(arg.albumId);
 });
 
 ipcMain.on(GET_ALL_ALBUMS, (event) => {
     event.returnValue = album.getAllAlbums();
 });
 
+ipcMain.on(ADD_ALBUM_TO_BLOCK, (event, arg) => {
+    block_album.createBlockAlbum(arg.albumId, arg.blockId);
+});
+
+ipcMain.on(DELETE_ALBUM_FROM_BLOCK, (event, arg) => {
+    block_album.deleteBlockAlbumById(arg.albumId, arg.blockId);
+});
+
 /*WORD*/
 ipcMain.on(ADD_WORD, (event, arg) => {
     word.createWord(arg.albumId, arg.wordNative, arg.wordTranslate, arg.image, null, arg.description, null, null);
-});
-
-ipcMain.on(ADD_ALBUM_TO_BLOCK, (event, arg) => {
-    block_album.createBlockAlbum(arg.albumId, arg.blockId);
 });
 
 ipcMain.on(SET_SETTINGS, (event, arg) => {
@@ -154,14 +167,6 @@ ipcMain.on(SET_SETTINGS, (event, arg) => {
 
 ipcMain.on(GET_ALL_LANGUAGES, (event) => {
     event.returnValue = language.getAllLanguages();
-});
-
-ipcMain.on(GET_BLOCK_IS_SHOW, (event) => {
-    event.returnValue = block.getBlocksByIsShow(1);
-});
-
-ipcMain.on(GET_ALL_BLOCKS, (event) => {
-    event.returnValue = block.getAllBlocks();
 });
 
 ipcMain.on(GET_SETTINGS, (event) => {

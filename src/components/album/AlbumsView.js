@@ -34,6 +34,16 @@ class AlbumsView extends React.Component {
     }
 
     createTable = () => {
+
+        let ipcLanguages = ipcRenderer.sendSync(constants.GET_ALL_LANGUAGES);
+        this.languages = new Array();
+        for (let languageNum = 0; languageNum < ipcLanguages.length; languageNum++) {
+            this.languages.push({
+                value: ipcLanguages[languageNum].id, label: ipcLanguages[languageNum].name
+            });
+
+        }
+
         let ipcAlbums = ipcRenderer.sendSync(constants.GET_ALL_ALBUMS);
 
         let table = [];
@@ -44,15 +54,34 @@ class AlbumsView extends React.Component {
 
             ipcBlockAlbums.forEach((ipcBlockAlbum) => {
                 let ipcBlock = ipcRenderer.sendSync(constants.GET_BLOCK_BY_ID, {id: ipcBlockAlbum.blockId});
-                blocks += ipcBlock.name + "\n";
+                if (ipcBlock != null) blocks += ipcBlock.name + "\n";
             });
+
+            let currLanguageNative = '';
+            for (let tpNum = 0; tpNum < this.languages.length; tpNum++) {
+                if (this.languages[tpNum].value == ipcAlbum.languageNative) {
+                    currLanguageNative = this.languages[tpNum].label;
+                    break;
+                }
+            }
+
+            let currLanguageTranslate = '';
+            for (let tpNum = 0; tpNum < this.languages.length; tpNum++) {
+                if (this.languages[tpNum].value == ipcAlbum.languageTranslate) {
+                    currLanguageTranslate = this.languages[tpNum].label;
+                    break;
+                }
+            }
 
             table.push(<tr>{<AlbumLine key={ipcAlbum.id}
                                        id={ipcAlbum.id}
                                        name={ipcAlbum.name}
-                                       languageNative={ipcAlbum.languageNative}
-                                       languageTranslate={ipcAlbum.languageTranslate}
-                                       blocks={blocks}/>}</tr>);
+                                       languageNativeId={ipcAlbum.languageNative}
+                                       languageTranslateId={ipcAlbum.languageTranslate}
+                                       languageNative={currLanguageNative}
+                                       languageTranslate={currLanguageTranslate}
+                                       blocks={blocks}
+                                       handler={this.handler}/>}</tr>);
         });
         return table;
     }

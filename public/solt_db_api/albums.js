@@ -122,7 +122,7 @@ module.exports = {
             }
         }
         return writer_reader.setData(tableName, fileData, function () {
-            log.info('Block with id = ' + updatedAlbum.id + ' was updated.');
+            log.info('Album with id = ' + updatedAlbum.id + ' was updated.');
         });
     }
 }

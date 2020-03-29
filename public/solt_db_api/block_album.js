@@ -18,7 +18,7 @@ module.exports = {
 
     isExists: (albumId, blockId) => {
         let fileData = writer_reader.getData(tableName);
-        for(let elNum = 0; elNum < fileData.length; elNum++) {
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['albumId'] === albumId && fileData[elNum]['blockId'] === blockId) {
                 return true;
             }
@@ -32,14 +32,14 @@ module.exports = {
 
     createBlockAlbum: (albumId, blockId) => {
 
-        if(!block.isExists(blockId) || !album.isExists(albumId)) {
+        if (!block.isExists(blockId) || !album.isExists(albumId)) {
             log.warn('Can not create BlockAlbum line. ' +
                 'Block or album does not exists! ' +
                 'Please check block with id = ' + blockId + ' and album with id = ' + albumId);
             return false;
         }
 
-        if(module.exports.isExists(albumId, blockId)) {
+        if (module.exports.isExists(albumId, blockId)) {
             log.warn('Can not create BlockAlbum line. ' +
                 'BlockAlbum with albumId = ' + albumId + ' and blockId = ' + blockId + ' already exists.');
             return false;
@@ -48,22 +48,23 @@ module.exports = {
         let fileData = writer_reader.getData(tableName);
 
         let id = fileData.length == undefined
-            || fileData.length == NaN
-            || fileData.length == null
-            || fileData.length == 0
+        || fileData.length == NaN
+        || fileData.length == null
+        || fileData.length == 0
             ? 0
-            : fileData[fileData.length-1].id + 1;
+            : fileData[fileData.length - 1].id + 1;
         fileData.push(module.exports.blockAlbum(id, albumId, blockId));
         return writer_reader.setData(tableName, fileData, function () {
             log.info('BlockAlbum with id = ' + id + ' was created.');
         });
     },
 
-    deleteBlockAlbumById: (id) => {
+    deleteBlockAlbumById: (albumId, blockId) => {
         let fileData = writer_reader.getData(tableName);
         let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
-            if (fileData[elNum]['id'] !== id) {
+            if (fileData[elNum]['albumId'] !== albumId
+                && fileData[elNum]['blockId'] !== blockId) {
                 newFileData.push(fileData[elNum]);
             }
         }
@@ -75,7 +76,7 @@ module.exports = {
     updateBlockAlbum: (updatedBlockAlbum) => {
         let fileData = writer_reader.getData(tableName);
 
-        if(!block.isExists(updatedBlockAlbum.blockId) || !album.isExists(updatedBlockAlbum.albumId)) {
+        if (!block.isExists(updatedBlockAlbum.blockId) || !album.isExists(updatedBlockAlbum.albumId)) {
             log.warn('Can not update BlockAlbum line. ' +
                 'Block or album does not exists! ' +
                 'Please check block with id = ' + updatedBlockAlbum.blockId + ' and album with id = ' + updatedBlockAlbum.albumId);

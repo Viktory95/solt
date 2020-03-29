@@ -16,12 +16,15 @@ class NewAlbum extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: props.id ? props.id : '',
+            id: props.id ? props.id : props.id == 0 ? 0 : -1,
             name: props.name ? props.name : '',
+            languageNativeId: props.languageNativeId ? props.languageNativeId : '',
+            languageTranslateId: props.languageTranslateId ? props.languageTranslateId : '',
             languageNative: props.languageNative ? props.languageNative : '',
             languageTranslate: props.languageTranslate ? props.languageTranslate : '',
             blocks: props.blocks ? props.blocks : '',
-            isSaved: false
+            isSaved: false,
+            handler: props.handler
         };
 
         let ipcLanguages = ipcRenderer.sendSync(constants.GET_ALL_LANGUAGES);
@@ -33,30 +36,30 @@ class NewAlbum extends React.Component {
 
         }
 
-        if (props.languageNative != null) {
+        if (props.languageNativeId != null) {
             let currLanguageNative = '';
             for (let tpNum = 0; tpNum < this.languages.length; tpNum++) {
-                if (this.languages[tpNum].value == props.languageNative) {
+                if (this.languages[tpNum].value == props.languageNativeId) {
                     currLanguageNative = this.languages[tpNum].label;
                     break;
                 }
             }
             this.selectedLanguageNative = {
-                value: props.languageNative,
+                value: props.languageNativeId,
                 label: currLanguageNative
             };
         }
 
-        if (props.languageTranslate != null) {
+        if (props.languageTranslateId != null) {
             let currLanguageTranslate = '';
             for (let tpNum = 0; tpNum < this.languages.length; tpNum++) {
-                if (this.languages[tpNum].value == props.languageTranslate) {
+                if (this.languages[tpNum].value == props.languageTranslateId) {
                     currLanguageTranslate = this.languages[tpNum].label;
                     break;
                 }
             }
             this.selectedLanguageTranslate = {
-                value: props.languageTranslate,
+                value: props.languageTranslateId,
                 label: currLanguageTranslate
             };
         }
@@ -64,19 +67,19 @@ class NewAlbum extends React.Component {
 
     handleClickCreateOrUpdateAlbum = () => {
         if (this.state.languageNative !== this.state.languageTranslate) {
-            if (this.state.id) {
-                ipcRenderer.send(constants.UPDATE_ALBUM, this.state);
-            } else {
+            if (this.state.id == -1) {
                 ipcRenderer.send(constants.ADD_ALBUM, this.state);
+            } else {
+                ipcRenderer.send(constants.UPDATE_ALBUM, this.state);
             }
-            this.setState({
-                isSaved: true
-            });
-            this.props.handler(false);
         } else {
             //TODO: make error message for users
             console.log('Languages can not be the same');
         }
+        this.setState({
+            isSaved: true
+        });
+        this.props.handler(false);
     }
 
     handleClickCancel = () => {
@@ -93,13 +96,15 @@ class NewAlbum extends React.Component {
 
     updateSelectAlbumLanguageNative = (evt) => {
         this.setState({
-            languageNative: evt.value
+            languageNative: evt.label,
+            languageNativeId: evt.value
         });
     }
 
     updateSelectAlbumLanguageTranslate = (evt) => {
         this.setState({
-            languageTranslate: evt.value
+            languageTranslate: evt.label,
+            languageTranslateId: evt.value
         });
     }
 
@@ -107,31 +112,48 @@ class NewAlbum extends React.Component {
         const {
             id,
             name,
+            languageNativeId,
+            languageTranslateId,
             languageNative,
             languageTranslate,
             blocks,
-            isSaved
+            isSaved,
+            handler
         } = this.state;
 
         if (isSaved) return (<div>
             <AlbumLine key={id}
                        id={id}
                        name={name}
+                       languageNativeId={languageNativeId}
+                       languageTranslateId={languageTranslateId}
                        languageNative={languageNative}
-                       languageTranslate={languageTranslate}/>
+                       languageTranslate={languageTranslate}
+                       blocks={blocks}
+                       handler={handler}/>
         </div>);
 
         return (
             <div>
-                <h4>{localizationStrings.album_name}</h4>
-                <input value={name} onChange={evt => this.updateInputAlbumName(evt)}/>
-                <h4>{localizationStrings.album_language_native}</h4>
-                <Select defaultValue={this.selectedLanguageNative} options={this.languages} onChange={evt => this.updateSelectAlbumLanguageNative(evt)}/>
-                <h4>{localizationStrings.album_language_translate}</h4>
-                <Select defaultValue={this.selectedLanguageTranslate} options={this.languages} onChange={evt => this.updateSelectAlbumLanguageTranslate(evt)}/>
-                <button id="new-album-button"
-                        onClick={this.handleClickCreateOrUpdateAlbum}>{localizationStrings.ok}</button>
-                <button id="cancel-button" onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                <tr>
+                    <td>
+                        <input value={name} onChange={evt => this.updateInputAlbumName(evt)}/>
+                    </td>
+                    <td>
+                        <Select defaultValue={this.selectedLanguageNative} options={this.languages}
+                                onChange={evt => this.updateSelectAlbumLanguageNative(evt)}/>
+                    </td>
+                    <td>
+                        <Select defaultValue={this.selectedLanguageTranslate} options={this.languages}
+                                onChange={evt => this.updateSelectAlbumLanguageTranslate(evt)}/>
+                    </td>
+                    <td>
+                        <button id="new-album-button"
+                                onClick={this.handleClickCreateOrUpdateAlbum}>{localizationStrings.ok}</button>
+                        <button id="cancel-button"
+                                onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                    </td>
+                </tr>
             </div>
         );
     }

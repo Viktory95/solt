@@ -161,7 +161,8 @@ class BlockLine extends React.Component {
             return <div className="BlockLine">
                 <NewBlock key={id} id={id} blockName={name}
                           timePeriod={timePeriod}
-                          isShow={isShow}/>
+                          isShow={isShow}
+                          handler={this.props.handler}/>
                 </div>;
         }
 

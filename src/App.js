@@ -1,6 +1,6 @@
 import styles from './App.css';
 import React from 'react';
-import AlbumToBlockAddition from './components/album/AlbumToBlockAddition';
+import AlbumToBlockAddition from './components/album/AlbumToBlockActions';
 import Settings from './components/settings/Settings';
 import Block from './components/block/Block';
 import BlocksView from './components/block/BlocksView';
@@ -29,24 +29,36 @@ class App extends React.Component {
 
     handleClickAlbumToBlockAddition = () => {
         this.setState({
-            showAlbumToBlockAdditionForm: true
+            showAlbumToBlockAdditionForm: true,
+            showSettingsForm: false,
+            showAllBlocks: false,
+            showAllAlbums: false
         });
     }
 
     handleClickSettingsUpdating = () => {
         this.setState({
-            showSettingsForm: true
+            showAlbumToBlockAdditionForm: false,
+            showSettingsForm: true,
+            showAllBlocks: false,
+            showAllAlbums: false
         });
     }
 
     handleClickBlocksView = () => {
         this.setState({
-            showAllBlocks: true
+            showAlbumToBlockAdditionForm: false,
+            showSettingsForm: false,
+            showAllBlocks: true,
+            showAllAlbums: false
         });
     }
 
     handleClickAlbumsView = () => {
         this.setState({
+            showAlbumToBlockAdditionForm: false,
+            showSettingsForm: false,
+            showAllBlocks: false,
             showAllAlbums: true
         });
     }
@@ -102,6 +114,7 @@ class App extends React.Component {
                     {!showAlbumToBlockAdditionForm
                     && !showSettingsForm
                     && !showAllBlocks
+                    && !showAllAlbums
                     && <table>
                             {this.createTable()}
                         </table>

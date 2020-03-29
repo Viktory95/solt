@@ -40,7 +40,8 @@ class BlocksView extends React.Component {
                                        id={ipcBlock.id}
                                        blockName={ipcBlock.name}
                                        timePeriod={ipcBlock.timePeriod}
-                                       isShow={ipcBlock.isShow}/>}</tr>);
+                                       isShow={ipcBlock.isShow}
+                                       handler={this.handler}/>}</tr>);
         });
         return table;
     }

@@ -16,12 +16,13 @@ class NewBlock extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: props.id ? props.id : '',
+            id: props.id ? props.id : props.id == 0 ? 0 : -1,
             name: props.blockName ? props.blockName : '',
             timePeriod: props.timePeriod ? props.timePeriod : '',
             isShow: props.isShow ? props.isShow : '',
             isSaved: false,
-            isCanceled: false
+            isCanceled: false,
+            handler: props.handler
         };
 
         this.optionsTimePeriod = [
@@ -155,10 +156,10 @@ class NewBlock extends React.Component {
     }
 
     handleClickCreateOrUpdateBlock = () => {
-        if(this.state.id) {
-            ipcRenderer.send(constants.UPDATE_BLOCK, this.state);
-        } else {
+        if (this.state.id == -1) {
             ipcRenderer.send(constants.ADD_BLOCK, this.state);
+        } else {
+            ipcRenderer.send(constants.UPDATE_BLOCK, this.state);
         }
         this.setState({
             isSaved: true
@@ -196,16 +197,19 @@ class NewBlock extends React.Component {
             id,
             name,
             timePeriod,
-            isShow
+            isShow,
+            isSaved,
+            handler
         } = this.state;
 
-        if (this.state.isSaved) return (<div>
-                <BlockLine key={id}
+        if (isSaved) return (<div>
+            <BlockLine key={id}
                        id={id}
                        blockName={name}
                        timePeriod={timePeriod}
-                       isShow={isShow}/>
-            </div>);
+                       isShow={isShow}
+                       handler={handler}/>
+        </div>);
 
         return (
             <div>
