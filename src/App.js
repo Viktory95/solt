@@ -1,6 +1,5 @@
 import styles from './App.css';
 import React from 'react';
-import AlbumToBlockAddition from './components/album/AlbumToBlockActions';
 import Settings from './components/settings/Settings';
 import Block from './components/block/Block';
 import BlocksView from './components/block/BlocksView';
@@ -20,25 +19,25 @@ class App extends React.Component {
         super();
 
         this.state = {
-            showAlbumToBlockAdditionForm: false,
+            // showAlbumToBlockAdditionForm: false,
             showSettingsForm: false,
             showAllBlocks: false,
             showAllAlbums: false
         }
     }
 
-    handleClickAlbumToBlockAddition = () => {
-        this.setState({
-            showAlbumToBlockAdditionForm: true,
-            showSettingsForm: false,
-            showAllBlocks: false,
-            showAllAlbums: false
-        });
-    }
+    // handleClickAlbumToBlockAddition = () => {
+    //     this.setState({
+    //         showAlbumToBlockAdditionForm: true,
+    //         showSettingsForm: false,
+    //         showAllBlocks: false,
+    //         showAllAlbums: false
+    //     });
+    // }
 
     handleClickSettingsUpdating = () => {
         this.setState({
-            showAlbumToBlockAdditionForm: false,
+            // showAlbumToBlockAdditionForm: false,
             showSettingsForm: true,
             showAllBlocks: false,
             showAllAlbums: false
@@ -47,7 +46,7 @@ class App extends React.Component {
 
     handleClickBlocksView = () => {
         this.setState({
-            showAlbumToBlockAdditionForm: false,
+            // showAlbumToBlockAdditionForm: false,
             showSettingsForm: false,
             showAllBlocks: true,
             showAllAlbums: false
@@ -56,7 +55,7 @@ class App extends React.Component {
 
     handleClickAlbumsView = () => {
         this.setState({
-            showAlbumToBlockAdditionForm: false,
+            // showAlbumToBlockAdditionForm: false,
             showSettingsForm: false,
             showAllBlocks: false,
             showAllAlbums: true
@@ -89,16 +88,16 @@ class App extends React.Component {
 
     render() {
         const {
-            showAlbumToBlockAdditionForm,
+            // showAlbumToBlockAdditionForm,
             showSettingsForm,
             showAllBlocks,
             showAllAlbums
         } = this.state;
         return (
             <div className="App">
-                <button className="menu-button" id="add-album-to-block"
-                        onClick={this.handleClickAlbumToBlockAddition}>{localizationStrings.add_album_to_block}
-                </button>
+                {/*<button className="menu-button" id="add-album-to-block"*/}
+                        {/*onClick={this.handleClickAlbumToBlockAddition}>{localizationStrings.add_album_to_block}*/}
+                {/*</button>*/}
                 <button className="menu-button" id="update-settings"
                         onClick={this.handleClickSettingsUpdating}>{localizationStrings.settings}</button>
                 <button className="menu-button" id="blocks-view"
@@ -106,13 +105,13 @@ class App extends React.Component {
                 <button className="menu-button" id="albums-view"
                         onClick={this.handleClickAlbumsView}>{localizationStrings.albums_view}</button>
 
-                {showAlbumToBlockAdditionForm && <AlbumToBlockAddition />}
+                {/*{showAlbumToBlockAdditionForm && <AlbumToBlockAddition />}*/}
                 {showSettingsForm && <Settings />}
                 {showAllBlocks && <BlocksView />}
                 {showAllAlbums && <AlbumsView />}
                 <div>
-                    {!showAlbumToBlockAdditionForm
-                    && !showSettingsForm
+                    {/*!showAlbumToBlockAdditionForm
+                    && */!showSettingsForm
                     && !showAllBlocks
                     && !showAllAlbums
                     && <table>

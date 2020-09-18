@@ -35,6 +35,10 @@ module.exports = {
         return writer_reader.getData(tableName);
     },
 
+    getWordsByAlbumId: (albumId) => {
+        return writer_reader.getData(albumId + tableName);
+    },
+
     createWord: (albumId, wordNative, wordTranslate, image, status, description, lastDate, statistic) => {
 
         if(!album.isExists(albumId)) {

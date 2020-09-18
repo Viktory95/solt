@@ -93,7 +93,7 @@ class AlbumsView extends React.Component {
 
         return (
             <div>
-                <button className="create-block-button" id="block-edit"
+                <button className="create-album-button" id="album-edit"
                         onClick={this.handleClickAlbumCreate}>{localizationStrings.create}</button>
                 {
                     <table>

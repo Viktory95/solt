@@ -35,7 +35,9 @@ let localizationStrings = new LocalizedStrings({
         create: 'Create',
         albums_view: 'View Albums',
         add_to_block: 'Add to block',
-        delete_from_block: 'Delete from block'
+        delete_from_block: 'Delete from block',
+        show_words: 'Show words',
+        hide_words: 'Hide words'
     },
     ru: {
         create_block: 'Добавить Блок',
@@ -45,7 +47,8 @@ let localizationStrings = new LocalizedStrings({
         settings: 'Настройки',
         block: 'Блок',
         album: 'Альбом',
-        album_name: 'Название альбома'
+        album_name: 'Название альбома',
+        show_words: 'Показать слова'
     }
 });
 

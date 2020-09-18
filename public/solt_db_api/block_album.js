@@ -64,12 +64,12 @@ module.exports = {
         let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['albumId'] !== albumId
-                && fileData[elNum]['blockId'] !== blockId) {
+                || fileData[elNum]['blockId'] !== blockId) {
                 newFileData.push(fileData[elNum]);
             }
         }
         return writer_reader.setData(tableName, newFileData, function () {
-            log.info('BlockAlbum with id = ' + id + ' was deleted.');
+            log.info('BlockAlbum with id = ' + blockId + ' was deleted.');
         });
     },
 

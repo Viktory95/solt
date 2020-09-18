@@ -17,5 +17,7 @@ module.exports = {
     GET_SETTINGS: 'get-settings',
     SET_SETTINGS: 'set-settings',
     GET_BLOCK_IS_SHOW: 'get-block-is-show',
-    SWITCH_VISIBILITY: 'switch-visibility'
+    SWITCH_VISIBILITY: 'switch-visibility',
+    GET_ALL_WORDS: 'get-all-words',
+    GET_WORDS_BY_ALBUM_ID: 'get-words-by-album-id'
 }

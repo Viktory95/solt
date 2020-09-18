@@ -24,7 +24,9 @@ const {
     GET_SETTINGS,
     SET_SETTINGS,
     GET_BLOCK_IS_SHOW,
-    SWITCH_VISIBILITY
+    SWITCH_VISIBILITY,
+    GET_ALL_WORDS,
+    GET_WORDS_BY_ALBUM_ID
 } = require('../utils/constants');
 
 const path = require('path');
@@ -129,11 +131,11 @@ ipcMain.on(GET_ALL_BLOCKS, (event) => {
 
 /*ALBUM*/
 ipcMain.on(ADD_ALBUM, (event, arg) => {
-    album.createAlbum(arg.name, arg.languageNative, arg.languageTranslate);
+    album.createAlbum(arg.name, arg.languageNativeId, arg.languageTranslateId);
 });
 
 ipcMain.on(UPDATE_ALBUM, (event, arg) => {
-    album.updateAlbum({id: arg.id, name: arg.name, languageNative: arg.languageNative, languageTranslate: arg.languageTranslate});
+    album.updateAlbum({id: arg.id, name: arg.name, languageNative: arg.languageNativeId, languageTranslate: arg.languageTranslateId});
 });
 
 ipcMain.on(DELETE_ALBUM, (event, arg) => {
@@ -160,6 +162,16 @@ ipcMain.on(DELETE_ALBUM_FROM_BLOCK, (event, arg) => {
 ipcMain.on(ADD_WORD, (event, arg) => {
     word.createWord(arg.albumId, arg.wordNative, arg.wordTranslate, arg.image, null, arg.description, null, null);
 });
+
+ipcMain.on(GET_ALL_WORDS, (event) => {
+    event.returnValue = word.getAllWords();
+});
+
+ipcMain.on(GET_WORDS_BY_ALBUM_ID, (event, arg) => {
+    event.returnValue = word.getWordsByAlbumId(arg.albumId);
+});
+
+/*SETTINGS*/
 
 ipcMain.on(SET_SETTINGS, (event, arg) => {
     settings.setAppSettings(arg.username, arg.userLanguage);

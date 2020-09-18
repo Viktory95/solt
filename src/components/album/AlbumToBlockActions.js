@@ -28,24 +28,8 @@ class AlbumToBlockActions extends React.Component {
             handler: props.handler,
             blockId: '',
             blockName: '',
-            blockOptions: []
+            blockOptions: props.blockOptions
         };
-
-        let ipcBlocks = ipcRenderer.sendSync(constants.GET_ALL_BLOCKS);
-        this.state.blockOptions = new Array();
-        for (let blockNum = 0; blockNum < ipcBlocks.length; blockNum++) {
-            if (this.state.isAdd && !this.state.blocks.includes(ipcBlocks[blockNum].name)) {
-                this.state.blockOptions.push({
-                    value: ipcBlocks[blockNum].id,
-                    label: ipcBlocks[blockNum].name
-                });
-            } else if (!this.state.isAdd && this.state.blocks.includes(ipcBlocks[blockNum].name)) {
-                this.state.blockOptions.push({
-                    value: ipcBlocks[blockNum].id,
-                    label: ipcBlocks[blockNum].name
-                });
-            }
-        }
     }
 
     handleClickAddOrDeleteBlock = () => {
@@ -82,7 +66,8 @@ class AlbumToBlockActions extends React.Component {
             blocks,
             isAdd,
             isSaved,
-            handler
+            handler,
+            blockOptions
         } = this.state;
 
         if (isSaved) return (<div>
@@ -104,7 +89,7 @@ class AlbumToBlockActions extends React.Component {
                         <h4>{localizationStrings.block}</h4>
                     </td>
                     <td>
-                        <Select options={this.blockOptions} onChange={evt => this.updateSelectBlock(evt)}/>
+                        <Select options={blockOptions} onChange={evt => this.updateSelectBlock(evt)}/>
                     </td>
                     <td>
                         <button id="new-album-button"
