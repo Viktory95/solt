@@ -104,9 +104,9 @@ class AlbumsView extends React.Component {
                             <th>{localizationStrings.block_name}</th>
                             <th>{localizationStrings.actions}</th>
                         </tr>
-                        {this.createTable()}
                         {isCrateFormShow
                         && <NewAlbum handler={this.handler}/>}
+                        {this.createTable()}
                     </table>
                 }
             </div>

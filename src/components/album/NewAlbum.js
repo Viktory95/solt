@@ -24,6 +24,7 @@ class NewAlbum extends React.Component {
             languageTranslate: props.languageTranslate ? props.languageTranslate : '',
             blocks: props.blocks ? props.blocks : '',
             isSaved: false,
+            isCanceled: false,
             handler: props.handler
         };
 
@@ -84,7 +85,7 @@ class NewAlbum extends React.Component {
 
     handleClickCancel = () => {
         this.setState({
-            isSaved: true
+            isCanceled: true
         });
     }
 
@@ -118,6 +119,7 @@ class NewAlbum extends React.Component {
             languageTranslate,
             blocks,
             isSaved,
+            isCanceled,
             handler
         } = this.state;
 
@@ -132,6 +134,8 @@ class NewAlbum extends React.Component {
                        blocks={blocks}
                        handler={handler}/>
         </div>);
+
+        if(isCanceled) return null;
 
         return (
             <div>

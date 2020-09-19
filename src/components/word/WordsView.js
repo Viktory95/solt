@@ -5,6 +5,7 @@ import React from 'react';
 import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';
 import WordLine from './WordLine';
+import NewWord from "./NewWord";
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -53,7 +54,8 @@ class WordsView extends React.Component {
 
     render() {
         const {
-            isCrateWordFormShow
+            isCrateWordFormShow,
+            albumId
         } = this.state;
 
         return (
@@ -66,14 +68,12 @@ class WordsView extends React.Component {
                             <th>{localizationStrings.word_native}</th>
                             <th>{localizationStrings.word_translate}</th>
                             <th>{localizationStrings.image}</th>
-                            <th>{localizationStrings.status}</th>
                             <th>{localizationStrings.description}</th>
-                            <th>{localizationStrings.lastDate}</th>
-                            <th>{localizationStrings.statistic}</th>
                         </tr>
+                        {isCrateWordFormShow
+                        && <NewWord handler={this.handler}
+                                    albumId={albumId}/>}
                         {this.createTable()}
-                        {/*{isCrateWordFormShow*/}
-                        {/*&& <NewAlbum handler={this.handler}/>}*/}
                     </table>
                 }
             </div>

@@ -5,6 +5,7 @@ import React from 'react';
 import Select from "react-select";
 import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';
+import WordLine from "./WordLine";
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -15,35 +16,34 @@ class NewWord extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            albumId: '',
-            wordNative: '',
-            wordTranslate: '',
-            image: '',
-            description: ''
+            id: props.id ? props.id : props.id == 0 ? 0 : -1,
+            albumId: props.albumId ? props.albumId : props.albumId == 0 ? 0 : -1,
+            wordNative: props.wordNative ? props.wordNative : '',
+            wordTranslate: props.wordTranslate ? props.wordTranslate : '',
+            image: props.image ? props.image : '',
+            status: props.status ? props.status : '',
+            description: props.description ? props.description : '',
+            lastDate: props.lastDate ? props.lastDate : '',
+            statistic: props.statistic ? props.statistic : '',
+            isCanceled: false,
+            isSaved: false,
+            handler: props.handler
         };
-
-        let ipcAlbums = ipcRenderer.sendSync(constants.GET_ALL_ALBUMS);
-        this.albums = new Array();
-        for(let albumNum = 0; albumNum < ipcAlbums.length; albumNum++) {
-            this.albums.push({
-                value: ipcAlbums[albumNum].id, label: ipcAlbums[albumNum].name
-            });
-
-        }
     }
 
     handleClickCreateWord = () => {
         ipcRenderer.send(constants.ADD_WORD, this.state);
+        this.setState({
+            isSaved: true
+        });
+        this.props.handler(false);
     }
 
     handleClickCancel = () => {
-        window.location.reload();
-    }
-
-    updateSelectWordAlbumId = (evt) => {
         this.setState({
-            albumId: evt.value
+            isCanceled: true
         });
+        this.props.handler(false);
     }
 
     updateInputWordWordNative = (evt) => {
@@ -71,20 +71,59 @@ class NewWord extends React.Component {
     }
 
     render() {
+        const {
+            id,
+            albumId,
+            wordNative,
+            wordTranslate,
+            image,
+            status,
+            description,
+            lastDate,
+            statistic,
+            isCanceled,
+            isSaved,
+            handler
+        } = this.state;
+
+        if (isSaved) return (<div>
+            <WordLine key={id}
+                      id={id}
+                      albumId={albumId}
+                      wordNative={wordNative}
+                      wordTranslate={wordTranslate}
+                      image={image}
+                      status={status}
+                      description={description}
+                      lastDate={lastDate}
+                      statistic={statistic}
+                      handler={handler}/>
+        </div>);
+
+        if (isCanceled) return null;
+
         return (
             <div>
-                <h4>{localizationStrings.album_name}</h4>
-                <Select options={this.albums} onChange={evt => this.updateSelectWordAlbumId(evt)} />
-                <h4>{localizationStrings.word_native}</h4>
-                <input onChange={evt => this.updateInputWordWordNative(evt)}/>
-                <h4>{localizationStrings.word_translate}</h4>
-                <input onChange={evt => this.updateInputWordWordTranslate(evt)}/>
-                <h4>{localizationStrings.image}</h4>
-                <input onChange={evt => this.updateInputWordImage(evt)}/>
-                <h4>{localizationStrings.description}</h4>
-                <input onChange={evt => this.updateInputDescription(evt)}/>
-                <button id="new-word-button" onClick={this.handleClickCreateWord}>{localizationStrings.ok}</button>
-                <button id="cancel-button" onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                <tr>
+                    <td>
+                        <input onChange={evt => this.updateInputWordWordNative(evt)}/>
+                    </td>
+                    <td>
+                        <input onChange={evt => this.updateInputWordWordTranslate(evt)}/>
+                    </td>
+                    <td>
+                        <input onChange={evt => this.updateInputWordImage(evt)}/>
+                    </td>
+                    <td>
+                        <input onChange={evt => this.updateInputDescription(evt)}/>
+                    </td>
+                    <td>
+                        <button id="new-word-button"
+                                onClick={this.handleClickCreateWord}>{localizationStrings.ok}</button>
+                        <button id="cancel-button"
+                                onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                    </td>
+                </tr>
             </div>
         );
     }
