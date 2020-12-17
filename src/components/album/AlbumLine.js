@@ -1,6 +1,7 @@
 /**
  * Created by Vi on 28.03.2020.
  */
+import styles from './Album.css';
 import React from 'react';
 import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';

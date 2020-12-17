@@ -69,6 +69,7 @@ class WordsView extends React.Component {
                             <th>{localizationStrings.word_translate}</th>
                             <th>{localizationStrings.image}</th>
                             <th>{localizationStrings.description}</th>
+                            <th>{localizationStrings.actions}</th>
                         </tr>
                         {isCrateWordFormShow
                         && <NewWord handler={this.handler}

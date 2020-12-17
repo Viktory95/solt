@@ -26,7 +26,9 @@ const {
     GET_BLOCK_IS_SHOW,
     SWITCH_VISIBILITY,
     GET_ALL_WORDS,
-    GET_WORDS_BY_ALBUM_ID
+    GET_WORDS_BY_ALBUM_ID,
+    DELETE_WORD,
+    UPDATE_WORD
 } = require('../utils/constants');
 
 const path = require('path');
@@ -169,6 +171,19 @@ ipcMain.on(GET_ALL_WORDS, (event) => {
 
 ipcMain.on(GET_WORDS_BY_ALBUM_ID, (event, arg) => {
     event.returnValue = word.getWordsByAlbumId(arg.albumId);
+});
+
+ipcMain.on(DELETE_WORD, (event, arg) => {
+    word.deleteWordById(arg.id, arg.albumId);
+});
+
+ipcMain.on(UPDATE_WORD, (event, arg) => {
+    word.updateWord({id: arg.id,
+        albumId: arg.albumId,
+        wordNative: arg.wordNative,
+        wordTranslate: arg.wordTranslate,
+        image: arg.image,
+        description: arg.description});
 });
 
 /*SETTINGS*/

@@ -1,4 +1,16 @@
 .Block {
     background-color: #05828e;
     padding: 5px;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    border: 4px double #162229;
+}
+
+button {
+    margin: 2px!important;
+    border-color: #05828e;
+    background-color: #162229;
+    color: white;
+    border-radius: 20px!important;
 }

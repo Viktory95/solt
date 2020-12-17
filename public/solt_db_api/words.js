@@ -69,7 +69,7 @@ module.exports = {
     },
 
     deleteWordById: (id, albumId) => {
-        let fileData = writer_reader.getData(tableName);
+        let fileData = writer_reader.getData(albumId + tableName);
         let newFileData = [];
         for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] !== id) {
@@ -93,14 +93,14 @@ module.exports = {
 
         for (let elNum = 0; elNum < fileData.length; elNum++) {
             if (fileData[elNum]['id'] === updatedWord.id) {
-                fileData[elNum]['albumId'] = updatedWord.albumId;
-                fileData[elNum]['wordNative'] = updatedWord.wordNative;
-                fileData[elNum]['wordTranslate'] = updatedWord.wordTranslate;
-                fileData[elNum]['image'] = updatedWord.image;
-                fileData[elNum]['status'] = updatedWord.status;
-                fileData[elNum]['description'] = updatedWord.description;
-                fileData[elNum]['lastDate'] = updatedWord.lastDate;
-                fileData[elNum]['statistic'] = updatedWord.statistic;
+                if(updatedWord.albumId != null) fileData[elNum]['albumId'] = updatedWord.albumId;
+                if(updatedWord.wordNative != null) fileData[elNum]['wordNative'] = updatedWord.wordNative;
+                if(updatedWord.wordTranslate != null) fileData[elNum]['wordTranslate'] = updatedWord.wordTranslate;
+                if(updatedWord.image != null) fileData[elNum]['image'] = updatedWord.image;
+                if(updatedWord.status != null) fileData[elNum]['status'] = updatedWord.status;
+                if(updatedWord.description != null) fileData[elNum]['description'] = updatedWord.description;
+                if(updatedWord.lastDate != null) fileData[elNum]['lastDate'] = updatedWord.lastDate;
+                if(updatedWord.statistic != null) fileData[elNum]['statistic'] = updatedWord.statistic;
             }
         }
         return writer_reader.setData(updatedWord.albumId + tableName, fileData, function () {

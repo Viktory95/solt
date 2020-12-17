@@ -19,5 +19,7 @@ module.exports = {
     GET_BLOCK_IS_SHOW: 'get-block-is-show',
     SWITCH_VISIBILITY: 'switch-visibility',
     GET_ALL_WORDS: 'get-all-words',
-    GET_WORDS_BY_ALBUM_ID: 'get-words-by-album-id'
+    GET_WORDS_BY_ALBUM_ID: 'get-words-by-album-id',
+    DELETE_WORD: 'delete-word',
+    UPDATE_WORD: 'update-word'
 }

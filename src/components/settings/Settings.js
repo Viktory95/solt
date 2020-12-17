@@ -1,6 +1,7 @@
 /**
  * Created by Vi on 17.11.2019.
  */
+import styles from './Settings.css';
 import React from 'react';
 import Select from "react-select";
 import constants from '../../constants/constants';

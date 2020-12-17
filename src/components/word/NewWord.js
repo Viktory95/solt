@@ -32,7 +32,11 @@ class NewWord extends React.Component {
     }
 
     handleClickCreateWord = () => {
-        ipcRenderer.send(constants.ADD_WORD, this.state);
+        if (this.state.id == -1) {
+            ipcRenderer.send(constants.ADD_WORD, this.state);
+        } else {
+            ipcRenderer.send(constants.UPDATE_WORD, this.state);
+        }
         this.setState({
             isSaved: true
         });

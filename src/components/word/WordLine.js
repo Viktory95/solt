@@ -4,6 +4,7 @@
 import React from 'react';
 import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';
+import NewWord from "./NewWord";
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -23,8 +24,23 @@ class WordLine extends React.Component {
             status: this.props.status,
             description: this.props.description,
             lastDate: this.props.lastDate,
-            statistic: this.props.statistic
+            statistic: this.props.statistic,
+            showEditWordForm: false,
+            isDeleted: false
         };
+    }
+
+    handleClickWordEdit = () => {
+        this.setState({
+            showEditWordForm: true
+        });
+    }
+
+    handleClickWordDelete = () => {
+        ipcRenderer.send(constants.DELETE_WORD, this.state);
+        this.setState({
+            isDeleted: true
+        });
     }
 
     render() {
@@ -34,20 +50,40 @@ class WordLine extends React.Component {
             wordNative,
             wordTranslate,
             image,
-            status,
             description,
-            lastDate,
-            statistic
+            showEditWordForm,
+            isDeleted
         } = this.state;
+
+        if (isDeleted) {
+            return false;
+        }
+
+        if (showEditWordForm) {
+            return <div className="AlbumLine">
+                <NewWord key={id}
+                         id={id}
+                albumId={albumId}
+                wordNative={wordNative}
+                wordTranslate={wordTranslate}
+                image={image}
+                description={description}
+                handler={this.props.handler}/>
+            </div>;
+        }
+
         return (
             <div className="WordLine">
                 <td>{wordNative}</td>
                 <td>{wordTranslate}</td>
                 <td>{image}</td>
-                <td>{status}</td>
                 <td>{description}</td>
-                <td>{lastDate}</td>
-                <td>{statistic}</td>
+                <td>
+                    <button className="edit-word-button" id="word-edit"
+                            onClick={this.handleClickWordEdit}>{localizationStrings.edit}</button>
+                    <button className="delete-word-button" id="word-delete"
+                            onClick={this.handleClickWordDelete}>{localizationStrings.delete}</button>
+                </td>
             </div>
         );
     }
