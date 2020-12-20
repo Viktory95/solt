@@ -73,7 +73,7 @@ class AlbumsView extends React.Component {
                 }
             }
 
-            table.push(<tr>{<AlbumLine key={ipcAlbum.id}
+            table.push(<AlbumLine key={ipcAlbum.id}
                                        id={ipcAlbum.id}
                                        name={ipcAlbum.name}
                                        languageNativeId={ipcAlbum.languageNative}
@@ -81,7 +81,7 @@ class AlbumsView extends React.Component {
                                        languageNative={currLanguageNative}
                                        languageTranslate={currLanguageTranslate}
                                        blocks={blocks}
-                                       handler={this.handler}/>}</tr>);
+                                       handler={this.handler}/>);
         });
         return table;
     }

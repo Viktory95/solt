@@ -24,7 +24,6 @@ class NewAlbum extends React.Component {
             languageTranslate: props.languageTranslate ? props.languageTranslate : '',
             blocks: props.blocks ? props.blocks : '',
             isSaved: false,
-            isCanceled: false,
             handler: props.handler
         };
 
@@ -85,8 +84,9 @@ class NewAlbum extends React.Component {
 
     handleClickCancel = () => {
         this.setState({
-            isCanceled: true
+            isSaved: true
         });
+        this.props.handler(false);
     }
 
     updateInputAlbumName = (evt) => {
@@ -119,46 +119,39 @@ class NewAlbum extends React.Component {
             languageTranslate,
             blocks,
             isSaved,
-            isCanceled,
             handler
         } = this.state;
 
-        if (isSaved) return (<div>
-            <AlbumLine key={id}
-                       id={id}
-                       name={name}
-                       languageNativeId={languageNativeId}
-                       languageTranslateId={languageTranslateId}
-                       languageNative={languageNative}
-                       languageTranslate={languageTranslate}
-                       blocks={blocks}
-                       handler={handler}/>
-        </div>);
-
-        if(isCanceled) return null;
+        if (isSaved) return (<AlbumLine key={id}
+                                        id={id}
+                                        name={name}
+                                        languageNativeId={languageNativeId}
+                                        languageTranslateId={languageTranslateId}
+                                        languageNative={languageNative}
+                                        languageTranslate={languageTranslate}
+                                        blocks={blocks}
+                                        handler={handler}/>);
 
         return (
-            <div>
-                <tr>
-                    <td>
-                        <input value={name} onChange={evt => this.updateInputAlbumName(evt)}/>
-                    </td>
-                    <td>
-                        <Select defaultValue={this.selectedLanguageNative} options={this.languages}
-                                onChange={evt => this.updateSelectAlbumLanguageNative(evt)}/>
-                    </td>
-                    <td>
-                        <Select defaultValue={this.selectedLanguageTranslate} options={this.languages}
-                                onChange={evt => this.updateSelectAlbumLanguageTranslate(evt)}/>
-                    </td>
-                    <td>
-                        <button id="new-album-button"
-                                onClick={this.handleClickCreateOrUpdateAlbum}>{localizationStrings.ok}</button>
-                        <button id="cancel-button"
-                                onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
-                    </td>
-                </tr>
-            </div>
+            <tr>
+                <td>
+                    <input className="empty-input" value={name} onChange={evt => this.updateInputAlbumName(evt)}/>
+                </td>
+                <td>
+                    <Select defaultValue={this.selectedLanguageNative} options={this.languages}
+                            onChange={evt => this.updateSelectAlbumLanguageNative(evt)}/>
+                </td>
+                <td>
+                    <Select defaultValue={this.selectedLanguageTranslate} options={this.languages}
+                            onChange={evt => this.updateSelectAlbumLanguageTranslate(evt)}/>
+                </td>
+                <td>
+                    <button id="new-album-button"
+                            onClick={this.handleClickCreateOrUpdateAlbum}>{localizationStrings.ok}</button>
+                    <button id="cancel-button"
+                            onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                </td>
+            </tr>
         );
     }
 }

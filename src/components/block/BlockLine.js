@@ -158,16 +158,14 @@ class BlockLine extends React.Component {
         }
 
         if (this.state.showEditBlockForm === true) {
-            return <div className="BlockLine">
-                <NewBlock key={id} id={id} blockName={name}
+            return <NewBlock key={id} id={id} blockName={name}
                           timePeriod={timePeriod}
                           isShow={isShow}
-                          handler={this.props.handler}/>
-                </div>;
+                          handler={this.props.handler}/>;
         }
 
         return (
-            <div className="BlockLine">
+            <tr className="BlockLine">
                 <td>{name}</td>
                 <td>{this.selectedTimePeriod.value}</td>
                 <td>{isShow == 0 ? 'no' : 'yes'}</td>
@@ -179,7 +177,7 @@ class BlockLine extends React.Component {
                     <button className="delete-block-button" id="block-delete"
                             onClick={this.handleClickBlockDelete}>{localizationStrings.delete}</button>
                 </td>
-            </div>
+            </tr>
         );
     }
 }

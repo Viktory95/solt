@@ -98,8 +98,7 @@ class AlbumLine extends React.Component {
         }
 
         if (showEditAlbumForm) {
-            return <div className="AlbumLine">
-                <NewAlbum key={id}
+            return <NewAlbum key={id}
                           id={id}
                           name={name}
                           languageNativeId={languageNativeId}
@@ -107,8 +106,7 @@ class AlbumLine extends React.Component {
                           languageNative={languageNative}
                           languageTranslate={languageTranslate}
                           blocks={blocks}
-                          handler={this.props.handler}/>
-            </div>;
+                          handler={this.props.handler}/>;
         }
 
         if (isAdd) {
@@ -121,8 +119,7 @@ class AlbumLine extends React.Component {
                     });
                 }
             }
-            return <div className="AlbumLine">
-                <AlbumToBlockActions key={id}
+            return <AlbumToBlockActions key={id}
                                      name={name}
                                      languageNativeId={languageNativeId}
                                      languageTranslateId={languageTranslateId}
@@ -132,8 +129,7 @@ class AlbumLine extends React.Component {
                                      albumId={id}
                                      isAdd={true}
                                      blockOptions={this.blockOptions}
-                                     handler={this.props.handler}/>
-            </div>;
+                                     handler={this.props.handler}/>;
         }
 
         if (isDelete) {
@@ -146,8 +142,7 @@ class AlbumLine extends React.Component {
                     });
                 }
             }
-            return <div className="AlbumLine">
-                <AlbumToBlockActions key={id}
+            return <AlbumToBlockActions key={id}
                                      name={name}
                                      languageNativeId={languageNativeId}
                                      languageTranslateId={languageTranslateId}
@@ -157,12 +152,10 @@ class AlbumLine extends React.Component {
                                      albumId={id}
                                      isAdd={false}
                                      blockOptions={this.blockOptions}
-                                     handler={this.props.handler}/>
-            </div>;
+                                     handler={this.props.handler}/>;
         }
 
         return (
-            <div className="AlbumLine">
                 <tr>
                     <td>{name}</td>
                     <td>{languageNative}</td>
@@ -182,12 +175,11 @@ class AlbumLine extends React.Component {
                         {showWords && <button className="hide-words-button" id="show-words"
                                 onClick={this.handleClickHideWords}>{localizationStrings.hide_words}</button>}
                     </td>
-                </tr>
-                <tr>
-                    {showWords
-                    && <WordsView albumId={id}/>}
-                </tr>
-            </div>
+                </tr> //TODO: show words
+                // {<tr>}
+                //     {{showWords}
+                //     {&& <WordsView albumId={id}/>}}
+                // {</tr>}
         );
     }
 }

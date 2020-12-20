@@ -56,8 +56,10 @@ class Settings extends React.Component {
     render() {
         return (
             <div>
-                <h4>{localizationStrings.username}</h4>
-                <input onChange={evt => this.updateInputUsername(evt)} value={ipcSettings.username}/>
+                <div className="solt-input-group">
+                    <h4>{localizationStrings.username}</h4>
+                    <input onChange={evt => this.updateInputUsername(evt)} value={ipcSettings.username}/>
+                </div>
                 <h4>{localizationStrings.language}</h4>
                 <Select options={this.languages} onChange={evt => this.updateSelectLanguage(evt)}/>
                 <button id="save-settings-button" onClick={this.handleClickSaveSettings}>{localizationStrings.save}</button>

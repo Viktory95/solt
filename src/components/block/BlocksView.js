@@ -36,12 +36,12 @@ class BlocksView extends React.Component {
         let table = [];
 
         ipcBlocks.forEach((ipcBlock) => {
-            table.push(<tr>{<BlockLine key={ipcBlock.id}
+            table.push(<BlockLine key={ipcBlock.id}
                                        id={ipcBlock.id}
                                        blockName={ipcBlock.name}
                                        timePeriod={ipcBlock.timePeriod}
                                        isShow={ipcBlock.isShow}
-                                       handler={this.handler}/>}</tr>);
+                                       handler={this.handler}/>);
         });
         return table;
     }
@@ -63,9 +63,9 @@ class BlocksView extends React.Component {
                             <th>{localizationStrings.block_is_visible}</th>
                             <th>{localizationStrings.actions}</th>
                         </tr>
-                        {this.createTable()}
                         {isCrateFormShow
                         && <NewBlock handler={this.handler}/>}
+                        {this.createTable()}
                     </table>
                 }
             </div>

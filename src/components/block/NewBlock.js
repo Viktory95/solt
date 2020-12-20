@@ -21,7 +21,6 @@ class NewBlock extends React.Component {
             timePeriod: props.timePeriod ? props.timePeriod : '',
             isShow: props.isShow ? props.isShow : '',
             isSaved: false,
-            isCanceled: false,
             handler: props.handler
         };
 
@@ -156,7 +155,7 @@ class NewBlock extends React.Component {
     }
 
     handleClickCreateOrUpdateBlock = () => {
-        if (this.state.id == -1) {
+        if (this.state.id == undefined) {
             ipcRenderer.send(constants.ADD_BLOCK, this.state);
         } else {
             ipcRenderer.send(constants.UPDATE_BLOCK, this.state);
@@ -171,6 +170,7 @@ class NewBlock extends React.Component {
         this.setState({
             isSaved: true
         });
+        this.props.handler(false);
     }
 
     updateInputBlockName = (evt) => {
@@ -202,37 +202,33 @@ class NewBlock extends React.Component {
             handler
         } = this.state;
 
-        if (isSaved) return (<div>
-            <BlockLine key={id}
+        if (isSaved) return (<BlockLine key={id}
                        id={id}
                        blockName={name}
                        timePeriod={timePeriod}
                        isShow={isShow}
-                       handler={handler}/>
-        </div>);
+                       handler={handler}/>);
 
         return (
-            <div>
-                <tr>
-                    <td>
-                        <input value={name} onChange={evt => this.updateInputBlockName(evt)}/>
-                    </td>
-                    <td>
-                        <Select defaultValue={this.selectedTimePeriod} options={this.optionsTimePeriod}
-                                onChange={evt => this.updateSelectBlockTimePeriod(evt)}/>
-                    </td>
-                    <td>
-                        <Select defaultValue={this.selectedIsShow} options={this.optionsIsShow}
-                                onChange={evt => this.updateSelectBlockIsShow(evt)}/>
-                    </td>
-                    <td>
-                        <button id="new-block-button"
-                                onClick={this.handleClickCreateOrUpdateBlock}>{localizationStrings.save}</button>
-                        <button id="cancel-button"
-                                onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
-                    </td>
-                </tr>
-            </div>
+            <tr>
+                <td>
+                    <input className="empty-input" value={name} onChange={evt => this.updateInputBlockName(evt)}/>
+                </td>
+                <td>
+                    <Select defaultValue={this.selectedTimePeriod} options={this.optionsTimePeriod}
+                            onChange={evt => this.updateSelectBlockTimePeriod(evt)}/>
+                </td>
+                <td>
+                    <Select defaultValue={this.selectedIsShow} options={this.optionsIsShow}
+                            onChange={evt => this.updateSelectBlockIsShow(evt)}/>
+                </td>
+                <td>
+                    <button id="new-block-button"
+                            onClick={this.handleClickCreateOrUpdateBlock}>{localizationStrings.save}</button>
+                    <button id="cancel-button"
+                            onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                </td>
+            </tr>
         )
             ;
     }

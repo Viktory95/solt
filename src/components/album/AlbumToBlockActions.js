@@ -70,35 +70,31 @@ class AlbumToBlockActions extends React.Component {
             blockOptions
         } = this.state;
 
-        if (isSaved) return (<div>
-            <AlbumLine key={albumId}
-                       id={albumId}
-                       name={name}
-                       languageNativeId={languageNativeId}
-                       languageTranslateId={languageTranslateId}
-                       languageNative={languageNative}
-                       languageTranslate={languageTranslate}
-                       blocks={blocks}
-                       handler={handler}/>
-        </div>);
+        if (isSaved) return (<AlbumLine key={albumId}
+                                        id={albumId}
+                                        name={name}
+                                        languageNativeId={languageNativeId}
+                                        languageTranslateId={languageTranslateId}
+                                        languageNative={languageNative}
+                                        languageTranslate={languageTranslate}
+                                        blocks={blocks}
+                                        handler={handler}/>);
 
         return (
-            <div>
-                <tr>
-                    <td>
-                        <h4>{localizationStrings.block}</h4>
-                    </td>
-                    <td>
-                        <Select options={blockOptions} onChange={evt => this.updateSelectBlock(evt)}/>
-                    </td>
-                    <td>
-                        <button id="new-album-button"
-                                onClick={this.handleClickAddOrDeleteBlock}>{localizationStrings.ok}</button>
-                        <button id="cancel-button"
-                                onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
-                    </td>
-                </tr>
-            </div>
+            <tr>
+                <td>
+                    <h4>{localizationStrings.block}</h4>
+                </td>
+                <td>
+                    <Select options={blockOptions} onChange={evt => this.updateSelectBlock(evt)}/>
+                </td>
+                <td>
+                    <button id="new-album-button"
+                            onClick={this.handleClickAddOrDeleteBlock}>{localizationStrings.ok}</button>
+                    <button id="cancel-button"
+                            onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                </td>
+            </tr>
         );
     }
 }
