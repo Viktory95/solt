@@ -28,7 +28,8 @@ const {
     GET_ALL_WORDS,
     GET_WORDS_BY_ALBUM_ID,
     DELETE_WORD,
-    UPDATE_WORD
+    UPDATE_WORD,
+    GET_ALBUM_BY_ID
 } = require('../utils/constants');
 
 const path = require('path');
@@ -158,6 +159,10 @@ ipcMain.on(ADD_ALBUM_TO_BLOCK, (event, arg) => {
 
 ipcMain.on(DELETE_ALBUM_FROM_BLOCK, (event, arg) => {
     block_album.deleteBlockAlbumById(arg.albumId, arg.blockId);
+});
+
+ipcMain.on(GET_ALBUM_BY_ID, (event, arg) => {
+    event.returnValue = album.getAlbumById(arg.albumId);
 });
 
 /*WORD*/

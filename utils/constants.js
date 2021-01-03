@@ -21,5 +21,6 @@ module.exports = {
     GET_ALL_WORDS: 'get-all-words',
     GET_WORDS_BY_ALBUM_ID: 'get-words-by-album-id',
     DELETE_WORD: 'delete-word',
-    UPDATE_WORD: 'update-word'
+    UPDATE_WORD: 'update-word',
+    GET_ALBUM_BY_ID: 'get-album_by_id'
 }

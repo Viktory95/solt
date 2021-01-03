@@ -18,6 +18,7 @@ class WordLine extends React.Component {
         this.state = {
             id: this.props.id,
             albumId: this.props.albumId,
+            album: null,
             wordNative: this.props.wordNative,
             wordTranslate: this.props.wordTranslate,
             image: this.props.image,
@@ -28,6 +29,9 @@ class WordLine extends React.Component {
             showEditWordForm: false,
             isDeleted: false
         };
+
+        let ipcAlbum = ipcRenderer.sendSync(constants.GET_ALBUM_BY_ID, {albumId: this.state.albumId});
+        this.state.album = ipcAlbum.name;
     }
 
     handleClickWordEdit = () => {
@@ -51,6 +55,7 @@ class WordLine extends React.Component {
             wordTranslate,
             image,
             description,
+            album,
             showEditWordForm,
             isDeleted
         } = this.state;
@@ -60,31 +65,30 @@ class WordLine extends React.Component {
         }
 
         if (showEditWordForm) {
-            return <div className="AlbumLine">
-                <NewWord key={id}
-                         id={id}
-                albumId={albumId}
-                wordNative={wordNative}
-                wordTranslate={wordTranslate}
-                image={image}
-                description={description}
-                handler={this.props.handler}/>
-            </div>;
+            return <NewWord key={id}
+                            id={id}
+                            albumId={albumId}
+                            wordNative={wordNative}
+                            wordTranslate={wordTranslate}
+                            image={image}
+                            description={description}
+                            handler={this.props.handler}/>;
         }
 
         return (
-            <div className="WordLine">
+            <tr>
                 <td>{wordNative}</td>
                 <td>{wordTranslate}</td>
                 <td>{image}</td>
                 <td>{description}</td>
+                <td>{album}</td>
                 <td>
                     <button className="edit-word-button" id="word-edit"
                             onClick={this.handleClickWordEdit}>{localizationStrings.edit}</button>
                     <button className="delete-word-button" id="word-delete"
                             onClick={this.handleClickWordDelete}>{localizationStrings.delete}</button>
                 </td>
-            </div>
+            </tr>
         );
     }
 }

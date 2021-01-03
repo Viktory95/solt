@@ -17,8 +17,7 @@ class WordsView extends React.Component {
         super(props);
 
         this.state = {
-            isCrateWordFormShow: false,
-            albumId: props.albumId
+            isCrateWordFormShow: false
         };
     }
 
@@ -35,27 +34,30 @@ class WordsView extends React.Component {
     }
 
     createTable = () => {
-        let ipcWords = ipcRenderer.sendSync(constants.GET_WORDS_BY_ALBUM_ID, {albumId: this.state.albumId});
         let table = [];
-        ipcWords.forEach((ipcWord) => {
-            table.push(<tr>{<WordLine key={ipcWord.id}
-                                      id={ipcWord.id}
-                                      albumId={ipcWord.albumId}
-                                      wordNative={ipcWord.wordNative}
-                                      wordTranslate={ipcWord.wordTranslate}
-                                      image={ipcWord.image}
-                                      status={ipcWord.status}
-                                      description={ipcWord.description}
-                                      lastDate={ipcWord.lastDate}
-                                      statistic={ipcWord.statistic}/>}</tr>);
+        let ipcAlbums = ipcRenderer.sendSync(constants.GET_ALL_ALBUMS);
+        ipcAlbums.forEach((opcAlbum) => {
+            let ipcWords = ipcRenderer.sendSync(constants.GET_WORDS_BY_ALBUM_ID, {albumId: opcAlbum.id});
+            ipcWords.forEach((ipcWord) => {
+                table.push(<WordLine key={ipcWord.id}
+                                          id={ipcWord.id}
+                                          albumId={ipcWord.albumId}
+                                          wordNative={ipcWord.wordNative}
+                                          wordTranslate={ipcWord.wordTranslate}
+                                          image={ipcWord.image}
+                                          status={ipcWord.status}
+                                          description={ipcWord.description}
+                                          lastDate={ipcWord.lastDate}
+                                          statistic={ipcWord.statistic}
+                                          handler={this.handler}/>);
+            });
         });
         return table;
     }
 
     render() {
         const {
-            isCrateWordFormShow,
-            albumId
+            isCrateWordFormShow
         } = this.state;
 
         return (
@@ -69,11 +71,11 @@ class WordsView extends React.Component {
                             <th>{localizationStrings.word_translate}</th>
                             <th>{localizationStrings.image}</th>
                             <th>{localizationStrings.description}</th>
+                            <th>{localizationStrings.album}</th>
                             <th>{localizationStrings.actions}</th>
                         </tr>
                         {isCrateWordFormShow
-                        && <NewWord handler={this.handler}
-                                    albumId={albumId}/>}
+                        && <NewWord handler={this.handler}/>}
                         {this.createTable()}
                     </table>
                 }

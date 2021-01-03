@@ -5,6 +5,7 @@ import LocalizedStrings from 'react-localization';
 
 let localizationStrings = new LocalizedStrings({
     en: {
+        home: 'Home',
         create_block: 'Add Block',
         create_album: 'Add Album',
         create_word: 'Add Word',
@@ -26,18 +27,19 @@ let localizationStrings = new LocalizedStrings({
         language: 'Language',
         save: 'Save',
         cancel: 'Cancel',
-        blocks_view: 'View Blocks',
+        blocks_view: 'Blocks',
         edit: 'Edit',
         visibility: 'Visibility',
         delete: 'Delete',
         actions: 'Actions',
         ok: 'OK',
         create: 'Create',
-        albums_view: 'View Albums',
+        albums_view: 'Albums',
         add_to_block: 'Add to block',
         delete_from_block: 'Delete from block',
         show_words: 'Show words',
-        hide_words: 'Hide words'
+        hide_words: 'Hide words',
+        words_view: 'Words'
     },
     ru: {
         create_block: 'Добавить Блок',

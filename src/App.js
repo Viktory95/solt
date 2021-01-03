@@ -7,6 +7,7 @@ import AlbumsView from './components/album/AlbumsView';
 import localizationStrings from './localozation/LocalizationStrings';
 import constants from './constants/constants';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import WordsView from "./components/word/WordsView";
 
 const ipcRenderer = window.electron.ipcRenderer;
 const columnCount = 5;
@@ -19,46 +20,61 @@ class App extends React.Component {
         super();
 
         this.state = {
-            // showAlbumToBlockAdditionForm: false,
+            showMainBlocks: true,
             showSettingsForm: false,
             showAllBlocks: false,
-            showAllAlbums: false
+            showAllAlbums: false,
+            showAllWords: false
         }
     }
 
-    // handleClickAlbumToBlockAddition = () => {
-    //     this.setState({
-    //         showAlbumToBlockAdditionForm: true,
-    //         showSettingsForm: false,
-    //         showAllBlocks: false,
-    //         showAllAlbums: false
-    //     });
-    // }
+    handleClickShowMainBlocks = () => {
+        this.setState({
+            showMainBlocks: true,
+            showSettingsForm: false,
+            showAllBlocks: false,
+            showAllAlbums: false,
+            showAllWords: false
+        });
+    }
 
     handleClickSettingsUpdating = () => {
         this.setState({
-            // showAlbumToBlockAdditionForm: false,
+            showMainBlocks: false,
             showSettingsForm: true,
             showAllBlocks: false,
-            showAllAlbums: false
+            showAllAlbums: false,
+            showAllWords: false
         });
     }
 
     handleClickBlocksView = () => {
         this.setState({
-            // showAlbumToBlockAdditionForm: false,
+            showMainBlocks: false,
             showSettingsForm: false,
             showAllBlocks: true,
-            showAllAlbums: false
+            showAllAlbums: false,
+            showAllWords: false
         });
     }
 
     handleClickAlbumsView = () => {
         this.setState({
-            // showAlbumToBlockAdditionForm: false,
+            showMainBlocks: false,
             showSettingsForm: false,
             showAllBlocks: false,
-            showAllAlbums: true
+            showAllAlbums: true,
+            showAllWords: false
+        });
+    }
+
+    handleClickWordsView = () => {
+        this.setState({
+            showMainBlocks: false,
+            showSettingsForm: false,
+            showAllBlocks: false,
+            showAllAlbums: false,
+            showAllWords: true
         });
     }
 
@@ -88,32 +104,31 @@ class App extends React.Component {
 
     render() {
         const {
-            // showAlbumToBlockAdditionForm,
+            showMainBlocks,
             showSettingsForm,
             showAllBlocks,
-            showAllAlbums
+            showAllAlbums,
+            showAllWords
         } = this.state;
         return (
             <div className="App">
-                {/*<button className="menu-button" id="add-album-to-block"*/}
-                        {/*onClick={this.handleClickAlbumToBlockAddition}>{localizationStrings.add_album_to_block}*/}
-                {/*</button>*/}
+                <button className="menu-button"
+                        onClick={this.handleClickShowMainBlocks}>{localizationStrings.home}</button>
                 <button className="menu-button" id="update-settings"
                         onClick={this.handleClickSettingsUpdating}>{localizationStrings.settings}</button>
                 <button className="menu-button" id="blocks-view"
                         onClick={this.handleClickBlocksView}>{localizationStrings.blocks_view}</button>
                 <button className="menu-button" id="albums-view"
                         onClick={this.handleClickAlbumsView}>{localizationStrings.albums_view}</button>
+                <button className="menu-button" id="words-view"
+                        onClick={this.handleClickWordsView}>{localizationStrings.words_view}</button>
 
-                {/*{showAlbumToBlockAdditionForm && <AlbumToBlockAddition />}*/}
                 {showSettingsForm && <Settings />}
                 {showAllBlocks && <BlocksView />}
                 {showAllAlbums && <AlbumsView />}
+                {showAllWords && <WordsView />}
                 <div>
-                    {/*!showAlbumToBlockAdditionForm
-                    && */!showSettingsForm
-                    && !showAllBlocks
-                    && !showAllAlbums
+                    {showMainBlocks
                     && <table>
                             {this.createTable()}
                         </table>

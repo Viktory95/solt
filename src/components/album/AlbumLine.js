@@ -29,9 +29,7 @@ class AlbumLine extends React.Component {
             showEditAlbumForm: false,
             hideComponent: false,
             isAdd: false,
-            isDelete: false,
-            showWords: false,
-            hideWords: true
+            isDelete: false
         };
     }
 
@@ -60,20 +58,6 @@ class AlbumLine extends React.Component {
         });
     }
 
-    handleClickShowWords = () => {
-        this.setState({
-            showWords: true,
-            hideWords: false
-        });
-    }
-
-    handleClickHideWords = () => {
-        this.setState({
-            showWords: false,
-            hideWords: true
-        });
-    }
-
     render() {
         const {
             id,
@@ -86,9 +70,7 @@ class AlbumLine extends React.Component {
             showEditAlbumForm,
             hideComponent,
             isAdd,
-            isDelete,
-            showWords,
-            hideWords
+            isDelete
         } = this.state;
 
         let ipcBlocks = ipcRenderer.sendSync(constants.GET_ALL_BLOCKS);
@@ -99,14 +81,14 @@ class AlbumLine extends React.Component {
 
         if (showEditAlbumForm) {
             return <NewAlbum key={id}
-                          id={id}
-                          name={name}
-                          languageNativeId={languageNativeId}
-                          languageTranslateId={languageTranslateId}
-                          languageNative={languageNative}
-                          languageTranslate={languageTranslate}
-                          blocks={blocks}
-                          handler={this.props.handler}/>;
+                             id={id}
+                             name={name}
+                             languageNativeId={languageNativeId}
+                             languageTranslateId={languageTranslateId}
+                             languageNative={languageNative}
+                             languageTranslate={languageTranslate}
+                             blocks={blocks}
+                             handler={this.props.handler}/>;
         }
 
         if (isAdd) {
@@ -120,16 +102,16 @@ class AlbumLine extends React.Component {
                 }
             }
             return <AlbumToBlockActions key={id}
-                                     name={name}
-                                     languageNativeId={languageNativeId}
-                                     languageTranslateId={languageTranslateId}
-                                     languageNative={languageNative}
-                                     languageTranslate={languageTranslate}
-                                     blocks={blocks}
-                                     albumId={id}
-                                     isAdd={true}
-                                     blockOptions={this.blockOptions}
-                                     handler={this.props.handler}/>;
+                                        name={name}
+                                        languageNativeId={languageNativeId}
+                                        languageTranslateId={languageTranslateId}
+                                        languageNative={languageNative}
+                                        languageTranslate={languageTranslate}
+                                        blocks={blocks}
+                                        albumId={id}
+                                        isAdd={true}
+                                        blockOptions={this.blockOptions}
+                                        handler={this.props.handler}/>;
         }
 
         if (isDelete) {
@@ -143,43 +125,35 @@ class AlbumLine extends React.Component {
                 }
             }
             return <AlbumToBlockActions key={id}
-                                     name={name}
-                                     languageNativeId={languageNativeId}
-                                     languageTranslateId={languageTranslateId}
-                                     languageNative={languageNative}
-                                     languageTranslate={languageTranslate}
-                                     blocks={blocks}
-                                     albumId={id}
-                                     isAdd={false}
-                                     blockOptions={this.blockOptions}
-                                     handler={this.props.handler}/>;
+                                        name={name}
+                                        languageNativeId={languageNativeId}
+                                        languageTranslateId={languageTranslateId}
+                                        languageNative={languageNative}
+                                        languageTranslate={languageTranslate}
+                                        blocks={blocks}
+                                        albumId={id}
+                                        isAdd={false}
+                                        blockOptions={this.blockOptions}
+                                        handler={this.props.handler}/>;
         }
 
         return (
-                <tr>
-                    <td>{name}</td>
-                    <td>{languageNative}</td>
-                    <td>{languageTranslate}</td>
-                    <td>{blocks}</td>
-                    <td>
-                        <button className="edit-album-button" id="album-edit"
-                                onClick={this.handleClickAlbumEdit}>{localizationStrings.edit}</button>
-                        <button className="add-to-block-button" id="add-to-block"
-                                onClick={this.handleClickAddToBlock}>{localizationStrings.add_to_block}</button>
-                        <button className="delete-from-block-button" id="delete-from-block"
-                                onClick={this.handleClickDeleteFromBlock}>{localizationStrings.delete_from_block}</button>
-                        <button className="delete-album-button" id="album-delete"
-                                onClick={this.handleClickAlbumDelete}>{localizationStrings.delete}</button>
-                        {hideWords && <button className="show-words-button" id="show-words"
-                                onClick={this.handleClickShowWords}>{localizationStrings.show_words}</button>}
-                        {showWords && <button className="hide-words-button" id="show-words"
-                                onClick={this.handleClickHideWords}>{localizationStrings.hide_words}</button>}
-                    </td>
-                </tr> //TODO: show words
-                // {<tr>}
-                //     {{showWords}
-                //     {&& <WordsView albumId={id}/>}}
-                // {</tr>}
+            <tr>
+                <td>{name}</td>
+                <td>{languageNative}</td>
+                <td>{languageTranslate}</td>
+                <td>{blocks}</td>
+                <td>
+                    <button className="edit-album-button" id="album-edit"
+                            onClick={this.handleClickAlbumEdit}>{localizationStrings.edit}</button>
+                    <button className="add-to-block-button" id="add-to-block"
+                            onClick={this.handleClickAddToBlock}>{localizationStrings.add_to_block}</button>
+                    <button className="delete-from-block-button" id="delete-from-block"
+                            onClick={this.handleClickDeleteFromBlock}>{localizationStrings.delete_from_block}</button>
+                    <button className="delete-album-button" id="album-delete"
+                            onClick={this.handleClickAlbumDelete}>{localizationStrings.delete}</button>
+                </td>
+            </tr>
         );
     }
 }

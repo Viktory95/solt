@@ -30,6 +30,16 @@ module.exports = {
         return writer_reader.getData(tableName);
     },
 
+    getAlbumById: (id) => {
+        let fileData = writer_reader.getData(tableName);
+        for(let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['id'] === id) {
+                return fileData[elNum];
+            }
+        }
+        return null;
+    },
+
     getAlbumsByLanguageNative: (languageNative) => {
         let fileData = writer_reader.getData(tableName);
         for(let elNum = 0; elNum < fileData.length; elNum++) {

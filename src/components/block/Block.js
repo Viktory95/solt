@@ -9,8 +9,6 @@ class Block extends React.Component {
         return (
             <div className="Block">
                 <h5>{this.props.blockName}</h5>
-                {/*<li>{this.props.timePeriod}</li>*/}
-                {/*<li>{this.props.isShow}</li>*/}
             </div>
         );
     }

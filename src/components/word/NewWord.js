@@ -25,10 +25,31 @@ class NewWord extends React.Component {
             description: props.description ? props.description : '',
             lastDate: props.lastDate ? props.lastDate : '',
             statistic: props.statistic ? props.statistic : '',
-            isCanceled: false,
             isSaved: false,
             handler: props.handler
         };
+
+        let ipcAlbums = ipcRenderer.sendSync(constants.GET_ALL_ALBUMS);
+        this.albums = new Array();
+        for (let albumNum = 0; albumNum < ipcAlbums.length; albumNum++) {
+            this.albums.push({
+                value: ipcAlbums[albumNum].id, label: ipcAlbums[albumNum].name
+            });
+        }
+
+        if (props.albumId != null) {
+            let currAlbum = '';
+            for (let albumNum = 0; albumNum < this.albums.length; albumNum++) {
+                if (this.albums[albumNum].value == props.albumId) {
+                    currAlbum = this.albums[albumNum].label;
+                    break;
+                }
+            }
+            this.selectedAlbum = {
+                value: props.albumId,
+                label: currAlbum
+            };
+        }
     }
 
     handleClickCreateWord = () => {
@@ -45,7 +66,7 @@ class NewWord extends React.Component {
 
     handleClickCancel = () => {
         this.setState({
-            isCanceled: true
+            isSaved: true
         });
         this.props.handler(false);
     }
@@ -74,6 +95,13 @@ class NewWord extends React.Component {
         });
     }
 
+    updateSelectAlbum = (evt) => {
+        this.setState({
+            album: evt.label,
+            albumId: evt.value
+        });
+    }
+
     render() {
         const {
             id,
@@ -85,13 +113,11 @@ class NewWord extends React.Component {
             description,
             lastDate,
             statistic,
-            isCanceled,
             isSaved,
             handler
         } = this.state;
 
-        if (isSaved) return (<div>
-            <WordLine key={id}
+        if (isSaved) return (<WordLine key={id}
                       id={id}
                       albumId={albumId}
                       wordNative={wordNative}
@@ -101,34 +127,33 @@ class NewWord extends React.Component {
                       description={description}
                       lastDate={lastDate}
                       statistic={statistic}
-                      handler={handler}/>
-        </div>);
-
-        if (isCanceled) return null;
+                      handler={handler}/>);
 
         return (
-            <div>
-                <tr>
-                    <td>
-                        <input onChange={evt => this.updateInputWordWordNative(evt)}/>
-                    </td>
-                    <td>
-                        <input onChange={evt => this.updateInputWordWordTranslate(evt)}/>
-                    </td>
-                    <td>
-                        <input onChange={evt => this.updateInputWordImage(evt)}/>
-                    </td>
-                    <td>
-                        <input onChange={evt => this.updateInputDescription(evt)}/>
-                    </td>
-                    <td>
-                        <button id="new-word-button"
-                                onClick={this.handleClickCreateWord}>{localizationStrings.ok}</button>
-                        <button id="cancel-button"
-                                onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
-                    </td>
-                </tr>
-            </div>
+            <tr>
+                <td>
+                    <input className="empty-input" value={wordNative} onChange={evt => this.updateInputWordWordNative(evt)}/>
+                </td>
+                <td>
+                    <input className="empty-input" value={wordTranslate} onChange={evt => this.updateInputWordWordTranslate(evt)}/>
+                </td>
+                <td>
+                    <input className="empty-input" value={image} onChange={evt => this.updateInputWordImage(evt)}/>
+                </td>
+                <td>
+                    <input className="empty-input" value={description} onChange={evt => this.updateInputDescription(evt)}/>
+                </td>
+                <td>
+                    <Select defaultValue={this.selectedAlbum} options={this.albums}
+                            onChange={evt => this.updateSelectAlbum(evt)}/>
+                </td>
+                <td>
+                    <button id="new-word-button"
+                            onClick={this.handleClickCreateWord}>{localizationStrings.ok}</button>
+                    <button id="cancel-button"
+                            onClick={this.handleClickCancel}>{localizationStrings.cancel}</button>
+                </td>
+            </tr>
         );
     }
 }
