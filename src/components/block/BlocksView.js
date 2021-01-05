@@ -3,6 +3,7 @@ import constants from '../../constants/constants';
 import localizationStrings from '../../localozation/LocalizationStrings';
 import BlockLine from './BlockLine';
 import NewBlock from './NewBlock';
+import TranslateTrainer from "../trainers/TranslateTrainer";
 
 const ipcRenderer = window.electron.ipcRenderer;
 let ipcSettings = ipcRenderer.sendSync(constants.GET_SETTINGS);
@@ -14,13 +15,22 @@ class BlocksView extends React.Component {
         super(props);
 
         this.state = {
-            isCrateFormShow: false
+            isCrateFormShow: false,
+            runTraining: false,
+            words: null
         };
     }
 
     handler = (isCrateFormShow) => {
         this.setState({
             isCrateFormShow: isCrateFormShow
+        });
+    }
+
+    handlerTraning = (runTraining, words) => {
+        this.setState({
+            runTraining: runTraining,
+            words: words
         });
     }
 
@@ -37,19 +47,25 @@ class BlocksView extends React.Component {
 
         ipcBlocks.forEach((ipcBlock) => {
             table.push(<BlockLine key={ipcBlock.id}
-                                       id={ipcBlock.id}
-                                       blockName={ipcBlock.name}
-                                       timePeriod={ipcBlock.timePeriod}
-                                       isShow={ipcBlock.isShow}
-                                       handler={this.handler}/>);
+                                  id={ipcBlock.id}
+                                  blockName={ipcBlock.name}
+                                  timePeriod={ipcBlock.timePeriod}
+                                  isShow={ipcBlock.isShow}
+                                  handlerTraning={this.handlerTraning}/>);
         });
         return table;
     }
 
     render() {
         const {
-            isCrateFormShow
+            isCrateFormShow,
+            runTraining,
+            words
         } = this.state;
+
+        if (runTraining) {
+            return <TranslateTrainer words={words}/>;
+        }
 
         return (
             <div>

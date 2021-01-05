@@ -39,7 +39,9 @@ let localizationStrings = new LocalizedStrings({
         delete_from_block: 'Delete from block',
         show_words: 'Show words',
         hide_words: 'Hide words',
-        words_view: 'Words'
+        words_view: 'Words',
+        next: 'Next',
+        training: 'Training'
     },
     ru: {
         create_block: 'Добавить Блок',

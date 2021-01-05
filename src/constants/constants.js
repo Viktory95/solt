@@ -22,5 +22,7 @@ module.exports = {
     GET_WORDS_BY_ALBUM_ID: 'get-words-by-album-id',
     DELETE_WORD: 'delete-word',
     UPDATE_WORD: 'update-word',
-    GET_ALBUM_BY_ID: 'get-album_by_id'
+    GET_ALBUM_BY_ID: 'get-album_by_id',
+    UPDATE_WORD_STATISTIC: 'update-word-statistic',
+    GET_BLOCK_ALBUM_BY_BLOCK_ID: 'get-block-album-by-block-id'
 }

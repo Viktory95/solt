@@ -167,6 +167,7 @@ class NewBlock extends React.Component {
     }
 
     handleClickCancel = () => {
+        //TODO: fix empty line after cancel
         this.setState({
             isSaved: true
         });

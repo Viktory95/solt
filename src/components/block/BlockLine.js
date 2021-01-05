@@ -21,7 +21,8 @@ class BlockLine extends React.Component {
             timePeriod: this.props.timePeriod,
             isShow: this.props.isShow,
             showEditBlockForm: false,
-            hideComponent: false
+            hideComponent: false,
+            handlerTraning: props.handlerTraning
         };
 
         this.optionsTimePeriod = [
@@ -145,6 +146,19 @@ class BlockLine extends React.Component {
         });
     }
 
+    handleClickBlockTraining = () => {
+        let wordArray = [];
+        let ipcBlocksAlbums = ipcRenderer.sendSync(constants.GET_BLOCK_ALBUM_BY_BLOCK_ID, {blockId: this.state.id});
+        ipcBlocksAlbums.forEach((ipcBlockAlbum) => {
+            let ipcAlbum = ipcRenderer.sendSync(constants.GET_ALBUM_BY_ID, {albumId: ipcBlockAlbum.albumId});
+            let ipcWords = ipcRenderer.sendSync(constants.GET_WORDS_BY_ALBUM_ID, {albumId: ipcAlbum.id});
+            ipcWords.forEach((ipcWord) => {
+                wordArray.push(ipcWord);
+            });
+        });
+        this.props.handlerTraning(true, wordArray);
+    }
+
     render() {
         const {
             id,
@@ -153,16 +167,17 @@ class BlockLine extends React.Component {
             isShow
         } = this.state;
 
-        if (this.state.hideComponent === true) {
+        if (this.state.hideComponent) {
             return false;
         }
 
-        if (this.state.showEditBlockForm === true) {
+        if (this.state.showEditBlockForm) {
             return <NewBlock key={id} id={id} blockName={name}
-                          timePeriod={timePeriod}
-                          isShow={isShow}
-                          handler={this.props.handler}/>;
+                             timePeriod={timePeriod}
+                             isShow={isShow}
+                             handler={this.props.handler}/>;
         }
+
 
         return (
             <tr className="BlockLine">
@@ -176,6 +191,8 @@ class BlockLine extends React.Component {
                             onClick={this.handleClickBlockVisibility}>{localizationStrings.visibility}</button>
                     <button className="delete-block-button" id="block-delete"
                             onClick={this.handleClickBlockDelete}>{localizationStrings.delete}</button>
+                    <button className="training-block-button" id="block-training"
+                            onClick={this.handleClickBlockTraining}>{localizationStrings.training}</button>
                 </td>
             </tr>
         );

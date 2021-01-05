@@ -36,8 +36,8 @@ class WordsView extends React.Component {
     createTable = () => {
         let table = [];
         let ipcAlbums = ipcRenderer.sendSync(constants.GET_ALL_ALBUMS);
-        ipcAlbums.forEach((opcAlbum) => {
-            let ipcWords = ipcRenderer.sendSync(constants.GET_WORDS_BY_ALBUM_ID, {albumId: opcAlbum.id});
+        ipcAlbums.forEach((ipcAlbum) => {
+            let ipcWords = ipcRenderer.sendSync(constants.GET_WORDS_BY_ALBUM_ID, {albumId: ipcAlbum.id});
             ipcWords.forEach((ipcWord) => {
                 table.push(<WordLine key={ipcWord.id}
                                           id={ipcWord.id}

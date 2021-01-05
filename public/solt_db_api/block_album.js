@@ -105,5 +105,17 @@ module.exports = {
             }
         }
         return blocksAlbum;
+    },
+
+    getBlockAlbumByBlockId: (blockId) => {
+        let fileData = writer_reader.getData(tableName);
+        let blocksAlbum = [];
+
+        for (let elNum = 0; elNum < fileData.length; elNum++) {
+            if (fileData[elNum]['blockId'] === blockId) {
+                blocksAlbum.push(fileData[elNum]);
+            }
+        }
+        return blocksAlbum;
     }
 }
